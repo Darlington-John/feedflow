@@ -6,6 +6,7 @@ import { useAuthContext } from "~/app/context/auth-context";
 import { avatars } from "~/lib/data/avatars";
 import { apiRequest } from "~/lib/utils/api-request";
 import UploadProfile from "./upload-icon";
+import { useParams } from "next/navigation";
 
 interface PopupPrompt {
   isVisible: boolean;
@@ -23,6 +24,7 @@ const EditIcon = ({
   setDisable,
 }: PopupPrompt) => {
   const { user } = useAuthContext();
+  const { team_id } = useParams();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [successful, setSuccessful] = useState(false);
@@ -57,7 +59,7 @@ const EditIcon = ({
     }
 
     await apiRequest({
-      url: "/api/auth/update-profile",
+      url: `/api/teams/${team_id}/update-icon`,
       method: "PATCH",
       body: formData,
       onSuccess: (response) => {
@@ -65,8 +67,7 @@ const EditIcon = ({
         toast.success(response.message, {
           icon: <FaCheck color="white" />,
         });
-        window.dispatchEvent(new CustomEvent("userUpdated"));
-        window.dispatchEvent(new CustomEvent("fetchUser"));
+        window.dispatchEvent(new CustomEvent("refetchTeam"));
         setTimeout(() => {
           togglePopup();
           setSuccessful(false);
@@ -164,6 +165,7 @@ const EditIcon = ({
             <button
               className="text-xs   text-center  hover:underline text-center text-silver-blue"
               onClick={() => {
+                setError("");
                 if (useAvatar) {
                   setUseAvatar(false);
                 } else {
@@ -174,7 +176,7 @@ const EditIcon = ({
               {useAvatar ? "Upload an Image?" : "Use an Avatar instead"}
             </button>
             {error && (
-              <h1 className="text-2xl sf-bold text-center text-white">
+              <h1 className="text-[11px] neue-light text-red text-center">
                 {error}
               </h1>
             )}

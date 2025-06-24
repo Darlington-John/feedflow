@@ -95,6 +95,11 @@ const EditDesc = ({
             autofocus={true}
             errorContent="Description is required"
           />
+          {error && (
+            <h1 className="text-[11px] neue-light text-red text-center">
+              {error}
+            </h1>
+          )}
           <div className="gap-2 flex w-full">
             <button
               className="bg-grey text-center w-full  hover:outline outline-light-grey   !rounded-md text-sm"

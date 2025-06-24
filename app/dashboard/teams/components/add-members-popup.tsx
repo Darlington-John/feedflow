@@ -15,7 +15,7 @@ interface PopupPrompt {
   setDisable: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const EditTeamName = ({
+const AddMembersPopup = ({
   isVisible,
   isActive,
   ref,
@@ -24,31 +24,31 @@ const EditTeamName = ({
 }: PopupPrompt) => {
   const { user } = useAuthContext();
   const { team_id } = useParams();
-  const [name, setName] = useState("");
+  const [memberEmail, setMemberEmail] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
   const [successful, setSuccessful] = useState(false);
-  const editName = async () => {
+  const addMember = async () => {
     if (!user) {
       return;
     }
-    if (loading) {
+    if (adding) {
       return;
     }
-    if (!name) {
-      setError("Name is required");
+    if (!memberEmail) {
+      setError("Email is required");
       return;
     }
-    setLoading(true);
+    setAdding(true);
     setError("");
     setDisable(true);
     await apiRequest({
-      url: `/api/teams/${team_id}/edit-name`,
-      method: "PATCH",
-      body: { userId: user._id, name },
+      url: `/api/teams/${team_id}/add-member`,
+      method: "POST",
+      body: { userId: user._id, memberEmail },
       onSuccess: (response) => {
         setSuccessful(true);
-        setName("");
+        setMemberEmail("");
         toast.success(response.message, {
           icon: <FaCheck color="white" />,
         });
@@ -63,7 +63,7 @@ const EditTeamName = ({
         setError(error);
       },
       onFinally: () => {
-        setLoading(false);
+        setAdding(false);
         setDisable(false);
       },
     });
@@ -79,21 +79,22 @@ const EditTeamName = ({
         >
           <div className="flex items-center flex-col gap-0 w-full leading-none">
             <h1 className="text-2xl sf-bold text-center text-white">
-              Edit Team Name
+              Invite members
             </h1>
             <p className="text-grey-blue text-center text-sm ">
-              Enter new name below
+              Enter the member&apos;s email here to either send an invite if
+              they&apos;re not on the app, or a notification if they already
+              have an account.
             </p>
           </div>
           <ClassicInput
-            value={name}
-            setValue={setName}
+            value={memberEmail}
+            setValue={setMemberEmail}
             error={error}
             setError={setError}
-            placeholder="New name"
+            placeholder="Member's email"
             autofocus={true}
-            errorContent="Name is required"
-            serverError={["User  not authenticated"]}
+            errorContent="Email is required"
           />
           {error && (
             <h1 className="text-[11px] neue-light text-red text-center">
@@ -104,17 +105,17 @@ const EditTeamName = ({
             <button
               className="bg-grey text-center w-full  hover:outline outline-light-grey   !rounded-md"
               onClick={togglePopup}
-              disabled={loading}
+              disabled={adding}
             >
               Cancel
             </button>
             <AsyncButton
               classname_overide="!h-[40px] !rounded-md"
               action="Edit"
-              disabled={!name}
-              loading={loading}
+              disabled={!memberEmail}
+              loading={adding}
               success={successful}
-              onClick={editName}
+              onClick={addMember}
             />
           </div>
         </div>
@@ -123,4 +124,4 @@ const EditTeamName = ({
   );
 };
 
-export default EditTeamName;
+export default AddMembersPopup;

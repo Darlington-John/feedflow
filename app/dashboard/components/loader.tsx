@@ -4,10 +4,10 @@ import logo from "~/public/images/logo.svg";
 import Link from "next/link";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 interface LoaderProps {
-  fetching: boolean;
-  errorFetching: boolean;
-  error: string;
-  children: React.ReactNode;
+  fetching?: boolean;
+  errorFetching?: boolean;
+  error?: string;
+  children?: React.ReactNode;
   classname_overide?: string;
 }
 

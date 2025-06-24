@@ -11,6 +11,7 @@ import EditName from "./edit-team/edit-name";
 import EditIcon from "./edit-team/edit-icon";
 import { useAuthContext } from "~/app/context/auth-context";
 import EditDesc from "./edit-team/edit-desc";
+import AddMembersPopup from "./add-members-popup";
 
 const TeamMenu = () => {
   const { team_id } = useParams();
@@ -46,6 +47,13 @@ const TeamMenu = () => {
     togglePopup: toggleChangeDescPopup,
     setDisableToggle: setDisableChangeDesc,
   } = usePopup();
+  const {
+    isVisible: addMembersVisible,
+    isActive: addMembersActive,
+    ref: addMembersRef,
+    togglePopup: toggleAddMembersPopup,
+    setDisableToggle: setDisableAddMembers,
+  } = usePopup();
   return (
     <>
       <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4 ">
@@ -71,7 +79,7 @@ const TeamMenu = () => {
                 //  eslint-disable-next-line
                 <img
                   src={team?.icon}
-                  className=" rounded-full object-cover  w-40  h-40  ring ring-grey"
+                  className=" rounded-full object-cover  w-20  h-20  ring ring-grey"
                   alt=""
                 />
               ) : (
@@ -146,6 +154,13 @@ const TeamMenu = () => {
                     </span>
                     <IoIosArrowForward />
                   </button>
+                  <button
+                    className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
+                    onClick={toggleAddMembersPopup}
+                  >
+                    <span>Invite members</span>
+                    <IoIosArrowForward />
+                  </button>
                 </div>
               ))}
           </>
@@ -171,6 +186,13 @@ const TeamMenu = () => {
         ref={iconRef}
         togglePopup={toggleIconPopup}
         setDisable={setDisableIcon}
+      />
+      <AddMembersPopup
+        isVisible={addMembersVisible}
+        isActive={addMembersActive}
+        ref={addMembersRef}
+        togglePopup={toggleAddMembersPopup}
+        setDisable={setDisableAddMembers}
       />
     </>
   );

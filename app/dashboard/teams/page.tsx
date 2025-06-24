@@ -19,7 +19,7 @@ const Teams = () => {
     togglePopup: toggleNewTeamPopup,
     setDisableToggle: disableNewTeamPopup,
   } = usePopup();
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const { fetchedData, isFetching, hasError, error } = usePageFetch<
     team_type[]
   >({
@@ -34,7 +34,9 @@ const Teams = () => {
           !user && "items-center justify-center"
         }`}
       >
-        {user ? (
+        {loading ? (
+          <Loader fetching={loading}></Loader>
+        ) : user ? (
           <Loader fetching={isFetching} errorFetching={hasError} error={error}>
             <div className="flex items-center w-full justify-between">
               <h1 className="text-2xl uppercase sf-light">Teams</h1>
@@ -49,7 +51,7 @@ const Teams = () => {
             <div className="flex items-start gap-4 flex-wrap">
               {fetchedData?.map((team) => (
                 <Link
-                  href={`/teams/${team._id}`}
+                  href={`/dashboard/teams/${team._id}`}
                   className="flex flex-col gap-2 items-center p-2 border border-grey  rounded-md  w-[350px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue"
                   key={team.updatedAt}
                 >
