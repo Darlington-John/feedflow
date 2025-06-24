@@ -28,6 +28,10 @@ const AddMembersPopup = ({
   const [error, setError] = useState("");
   const [adding, setAdding] = useState(false);
   const [successful, setSuccessful] = useState(false);
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   const addMember = async () => {
     if (!user) {
       return;
@@ -35,6 +39,11 @@ const AddMembersPopup = ({
     if (adding) {
       return;
     }
+    if (!isValidEmail(memberEmail.trim().toLowerCase())) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
     if (!memberEmail) {
       setError("Email is required");
       return;
@@ -94,7 +103,7 @@ const AddMembersPopup = ({
             setError={setError}
             placeholder="Member's email"
             autofocus={true}
-            errorContent="Email is required"
+            errorContent={"Email is required "}
           />
           {error && (
             <h1 className="text-[11px] neue-light text-red text-center">
@@ -111,7 +120,7 @@ const AddMembersPopup = ({
             </button>
             <AsyncButton
               classname_overide="!h-[40px] !rounded-md"
-              action="Edit"
+              action="Add"
               disabled={!memberEmail}
               loading={adding}
               success={successful}
