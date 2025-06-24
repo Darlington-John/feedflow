@@ -1,26 +1,184 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-navy:#091926;
+  --color-dark-navy: #010812;
+  --color-red: #FF4F40;
+  --color-grey:#1C3A4D;
+  --color-light-blue:#DBE4E9;
+--color-lavender:#9dcefe;
+  --color-fade-grey:#0f212d;
+  --color-grey-blue:#748791;
+  --color-powder-blue:#0AA0EA;
+  --color-fade-blue:#4696dd;
+  --color-silver-blue: #b7cad4;
+  --color-magenta:#DE019F;
+  --breakpoint-4xl: 100rem;
+  --breakpoint-3xl: 95.9375rem;
+  --breakpoint-2xl: 87.5rem;
+  --breakpoint-xl: 79.9375rem;
+  --breakpoint-lg: 63.9375rem;
+  --breakpoint-md: 47.9375rem;
+  --breakpoint-sm: 39.9375rem;
+  --breakpoint-xs: 35.9375rem;
+  --breakpoint-2xs: 31.25rem;
+  --breakpoint-3xs: 25rem;
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+   -webkit-background-clip: text;
+   -webkit-text-fill-color: #ffffff !important;
+   box-shadow: inset  100px 100px #1C3A4D !important;
+}
+
+*{
+  font-family: var(--font-sf-reg);
+  
+}
+
+.sf-black{
+  font-family: var(--font-sf-black);
+}
+
+.sf-reg{
+  font-family: var(--font-sf-reg);
+}
+
+.sf-bold{
+  font-family: var(--font-sf-bold);
+}
+
+.sf-light{
+  font-family: var(--font-sf-light);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #2C2C2C; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D1D1D1; 
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f5f5f5; 
+}
+
+
+
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+  
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  
+  .sidebar::-webkit-scrollbar-thumb{
+    background: #748791
+  }
+  
+  @keyframes scaleIn {
+    from {
+       transform: scale(0);
+    }
+    to {
+       transform: scale(1);
+    }
+  }
+  
+  @keyframes scaleOut {
+    from {
+      transform: scale(1);
+      opacity: 1;
+   }
+   to {
+      transform: scale(0);
+   }
+  }
+  
+  .mid-popup {
+    transform: scale(0);
+  
+    animation: scaleIn 0.3s forwards;
+  }
+  .mid-popup-hidden {
+    animation: scaleOut 0.3s forwards;
+    opacity: 0;
+  }
+  
+   button{
+    cursor: pointer;
+   }
+  
+   .Toastify__toast-container {
+    --toastify-toast-width: auto;
+  }
+  .Toastify__progress-bar--success {
+    --toastify-color-progress-success: white;
+    visibility: hidden;
+  }
+  .Toastify__toast-icon {
+    margin: 0px !important;
+  }
+  .Toastify__toast {
+    font-size: 14px !important;
+    outline: 2px solid #f2ebff00;
+    box-shadow: 0px 12px 16px 0px rgba(0, 0, 0, 0.1) !important;
+    gap: 5px !important;
+    border-radius: 1000px !important;
+    overflow: hidden !important;
+    --toastify-toast-width: auto;
+    --toastify-toast-min-height: 40px;
+    --toastify-toast-max-height: 40px;
+    padding: 0px 10px 0px 10px !important;
+    text-align: center !important;
+    color: #fff !important;
+    width: auto !important;
+  }
+  .Toastify__toast-body > div:last-child {
+    flex-shrink: 0 !important;
+    text-wrap: nowrap !important;
+  }
+  .Toastify__toast--success {
+    background-color: #00a600 !important;
+  }
+  
+  .Toastify__toast--error{
+    color: #4b4b4b !important;
+  }
+  
+  .Toastify__toast-body {
+    padding: 0px !important;
+    margin: 0px !important;
+  }
+  
+  @media screen and (max-width: 480px) {
+    .Toastify__toast-container {
+       width: 100% !important;
+       margin-left: auto !important;
+       margin-right: auto !important;
+       left: 50% !important;
+      
+       top: 50px !important;
+       transform: translateX(-50%) !important;
+    }
+    .Toastify__toast {
+  
+      margin-left: auto !important;
+      margin-right: auto !important;
+  
+  text-wrap: nowrap;
+    }
+  }
