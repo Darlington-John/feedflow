@@ -2,7 +2,6 @@
 import { FaEllipsisVertical, FaPlus } from "react-icons/fa6";
 import { usePopup } from "~/lib/utils/toggle-popups";
 import NewTeamPopup from "./components/new-team-popup";
-import ChatTest from "../components/chat-test";
 import { usePageFetch } from "~/lib/utils/fetch-page-data";
 import { team_type } from "~/lib/types/team";
 import Loader from "../components/loader";
@@ -51,7 +50,7 @@ const Teams = () => {
             <div className="flex items-start gap-4 flex-wrap">
               {fetchedData?.map((team) => (
                 <Link
-                  href={`/dashboard/teams/${team._id}`}
+                  href={`/dashboard/teams/${team._id}?query=feedbacks`}
                   className="flex flex-col gap-2 items-center p-2 border border-grey  rounded-md  w-[350px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue"
                   key={team.updatedAt}
                 >
@@ -82,7 +81,6 @@ const Teams = () => {
                 </Link>
               ))}
             </div>
-            <ChatTest />
           </Loader>
         ) : (
           <div

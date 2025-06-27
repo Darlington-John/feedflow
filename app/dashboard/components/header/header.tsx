@@ -6,7 +6,6 @@ import { usePopup } from "~/lib/utils/toggle-popups";
 import ProfileMenu from "./profile-menu";
 import LogoutPrompt from "./logout-prompt";
 import { FaSearch } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
 import { FaRegBell } from "react-icons/fa";
 import logo from "~/public/images/logo.svg";
 const Header = () => {
@@ -42,10 +41,6 @@ const Header = () => {
       <div className="flex items-center gap-0">
         {user ? (
           <>
-            <button className="flex items-center gap-1  hover:bg-grey py-2 px-3 rounded-full ">
-              <FaPlus className="text-silver-blue" size={20} />
-              <h1 className="text-sm  text-light-blue">Give feedback</h1>
-            </button>
             <button className="hover:bg-grey py-2 px-2 rounded-full ">
               <FaRegBell className=" text-silver-blue" size={20} />
             </button>

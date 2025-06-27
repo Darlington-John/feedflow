@@ -1,0 +1,85 @@
+.tiptap {
+    :first-child {
+      margin-top: 0;
+    }
+  
+    /* List styles */
+    ul, 
+    ol {
+      padding: 0 1rem;
+      margin: 1.25rem 1rem 1.25rem 0.4rem;
+      
+      li p {
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+      }
+    }
+  
+    /* Heading styles */
+    h1, 
+    h2, 
+    h3, 
+    h4, 
+    h5, 
+    h6 {
+      line-height: 25px;
+      
+      text-wrap: pretty;
+    }
+  
+    h1, 
+    h2 {
+      margin-top:0.5rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    h1 { 
+      font-size: 1.2rem; 
+    }
+  
+    h2 { 
+      font-size: 1.1rem; 
+    }
+
+  
+    /* Code and preformatted text styles */
+    code {
+      background-color: #1C3A4D;
+      border-radius: 0.4rem;
+      font-size: 0.85rem;
+      padding: 0.25em 0.3em;
+      font-family: monospace;
+    }
+
+  
+    pre {
+      background: #0f212d;
+      border-radius: 0.5rem;
+font-family: monospace;
+      margin: 1.5rem 0;
+      padding: 0.5rem 0.7rem;
+  
+      code {
+        background: none;
+        color: inherit;
+        font-size: 0.7rem;
+        padding: 0;
+      }
+    }
+  
+    blockquote {
+      border-left: 2px solid #0AA0EA;
+      margin: 0.5rem 0;
+      padding-left: 1rem;
+    }
+  
+    hr {
+      border: none;
+      border-top: 1px solid #1C3A4D;
+      margin: 1rem 0;
+    }
+  }
+
+  li{
+    list-style-type: disc;
+  }

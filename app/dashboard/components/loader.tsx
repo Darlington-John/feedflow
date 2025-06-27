@@ -19,7 +19,7 @@ const Loader: React.FC<LoaderProps> = ({
   classname_overide,
 }) => {
   const renderErrorState = () => (
-    <div className="bg-navy  h-screen w-full flex items-center justify-center  flex-col">
+    <div className="bg-navy  min-h-[50vh]  w-full flex items-center justify-center  flex-col">
       <div className="flex  flex-col gap-3 bg-grey    rounded-2xl  w-[500px] py-2">
         <div className="flex gap-2  items-start    p-4  w-full">
           <IoIosInformationCircleOutline size={38} className="text-red" />
@@ -51,7 +51,7 @@ const Loader: React.FC<LoaderProps> = ({
 
   const renderLoadingState = () => (
     <div
-      className={`${classname_overide} bg-navy  h-screen w-full flex items-center justify-center  `}
+      className={`${classname_overide} bg-navy  min-h-[50vh] w-full flex items-center justify-center  `}
     >
       <div className=" flex items-center justify-center  w-12  h-12   relative  ">
         <div className="bg-grey p-5 absolute  animate-ping w-full h-full   "></div>

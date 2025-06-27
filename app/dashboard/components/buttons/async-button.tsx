@@ -12,7 +12,7 @@ interface asyncProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
 }
 const AsyncButton = ({
-  className = "  flex items-center justify-center    rounded-full   text-center bg-powder-blue text-white  w-full h-[45px] text-sm ",
+  className = "  flex items-center justify-center    rounded-full   text-center bg-powder-blue text-white  w-full h-[45px] text-sm  hover:ring ring-white duration-150",
   action,
   loading,
   success,

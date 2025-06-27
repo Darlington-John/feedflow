@@ -145,7 +145,7 @@ ${password && "pr-8"}
             }}
           />
           <span className="text-xs text-silver-blue text-end">
-            {String(value).length}/160
+            {String(value).length}/{maxlength}
           </span>
         </div>
       )}

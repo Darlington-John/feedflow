@@ -63,7 +63,7 @@ const NewTeamPopup = ({
           setTeamDesc("");
           setSucessful(false);
           router.push(`/dashboard/teams/${res.teamId}`);
-          toast.success("Redirecting");
+          toast.info("Redirecting");
         }, 1500);
       },
       onError: (error) => {

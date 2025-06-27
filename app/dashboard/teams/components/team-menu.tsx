@@ -97,6 +97,17 @@ const TeamMenu = () => {
                 )}
               </div>
             </div>
+            <div className="flex flex-col gap-1 ">
+              {team?.description && (
+                <h1 className="text-[13px] text-silver-blue  text-start sf-light">
+                  {team.description}
+                </h1>
+              )}
+
+              <h1 className="text-xs text-fade-blue text-start ">
+                • Created {formatDate(team?.createdAt as string)}
+              </h1>
+            </div>
             <div className="flex items-center gap-6">
               <div className="flex flex-col  gap-1">
                 <span className="text-white text-sm">
@@ -115,17 +126,7 @@ const TeamMenu = () => {
                 </h1>
               </div>
             </div>
-            <div className="flex flex-col gap-1 ">
-              {team?.description && (
-                <h1 className="text-[13px] text-silver-blue  text-start sf-light">
-                  {team.description}
-                </h1>
-              )}
 
-              <h1 className="text-xs text-fade-blue text-start ">
-                • Created {formatDate(team?.createdAt as string)}
-              </h1>
-            </div>
             {team?.admins.includes(user?._id as string) ||
               (team?.super_admins.includes(user?._id as string) && (
                 <div className="flex flex-col gap-2 w-full">

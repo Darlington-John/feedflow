@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import Team from "~/lib/models/teams";
-import User from "~/lib/models/users";
 import connectMongo from "~/lib/mongodb";
 import { mailOptions, transporter } from "~/lib/nodemailer";
-
+import jwt from "jsonwebtoken";
 export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ team_id: string }> }
@@ -62,36 +61,27 @@ export async function POST(
       );
     }
 
-    // Try to find the user by email
-    const user = await User.findOne({ email: memberEmail });
+    const inviteToken = jwt.sign(
+      {
+        email: memberEmail,
+        team_id: team._id,
+        type: "team-invite",
+      },
+      process.env.JWT_SECRET!,
+      { expiresIn: "3d" }
+    );
+    const inviteLink = `http://localhost:3000/dashboard/teams/${team_id}?query=invite&token=${inviteToken}`;
+    await transporter.sendMail({
+      ...mailOptions,
+      to: memberEmail,
+      subject: "Join Our App",
+      html: `<p>You’ve been invited to join a team (${team?.name}) on FeedFlow. <a href="${inviteLink}">Click here to join</a></p>`,
+    });
 
-    if (user) {
-      // Add existing user to the team
-      team.members.push(user._id);
-      await team.save();
-
-      // Optionally, add this team to user's recent_teams list
-      // user.recent_teams.push(team._id);
-      // await user.save();
-
-      return NextResponse.json(
-        { message: "Member added successfully", newMemberId: user._id },
-        { status: 200 }
-      );
-    } else {
-      // Send invite email if the user doesn't exist
-      await transporter.sendMail({
-        ...mailOptions,
-        to: memberEmail,
-        subject: "Join Our App",
-        html: `<p>You’ve been invited to join a team on [Your App]. <a href="https://your-app.com/invite/${team_id}">Click here to join</a></p>`,
-      });
-
-      return NextResponse.json(
-        { message: "Invite email sent to user who is not on the app" },
-        { status: 200 }
-      );
-    }
+    return NextResponse.json(
+      { message: "Invite email sent." },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Add member error:", error);
     return NextResponse.json(

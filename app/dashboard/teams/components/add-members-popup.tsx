@@ -112,7 +112,7 @@ const AddMembersPopup = ({
           )}
           <div className="gap-2 flex w-full">
             <button
-              className="bg-grey text-center w-full  hover:outline outline-light-grey   !rounded-md"
+              className="bg-grey text-center w-full  hover:outline outline-light-grey   !rounded-md text-sm"
               onClick={togglePopup}
               disabled={adding}
             >
