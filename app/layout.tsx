@@ -44,7 +44,7 @@ export default function RootLayout({
         <meta name="description" content="App by Dax" />
       </head>
       <body
-        className={`${SFReg.variable}   ${SFBlack.variable}  ${SFBold.variable}  ${SFLight.variable}  antialiased`}
+        className={`${SFReg.variable}   ${SFBlack.variable}  ${SFBold.variable}  ${SFLight.variable}  antialiased  bg-navy`}
       >
         <NextAuthProvider>
           <Provider store={store}>

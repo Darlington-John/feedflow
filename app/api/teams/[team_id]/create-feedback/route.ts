@@ -82,8 +82,19 @@ export async function POST(
       team: team_id,
     });
 
+    const adminIds = team.admins.map((id) => id.toString());
+    const superAdminIds = team.super_admins.map((id) => id.toString());
+
     return NextResponse.json(
-      { message: "Feedback given", feedback: newFeedback },
+      {
+        message: "Feedback given",
+        feedback: newFeedback,
+        role: superAdminIds?.includes(userId)
+          ? "super admin"
+          : adminIds?.includes(userId)
+          ? "admin"
+          : "member",
+      },
       { status: 200 }
     );
   } catch (error) {

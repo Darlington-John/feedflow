@@ -1,12 +1,5 @@
 "use client";
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { usePopup } from "~/lib/utils/toggle-popups";
 
 interface UtilsContextType {
@@ -15,16 +8,13 @@ interface UtilsContextType {
   authPopupRef: React.RefObject<HTMLDivElement | null>;
   toggleAuthPopup: () => void;
   setDisableToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  isDarkmode: boolean;
-  setIsDarkmode: React.Dispatch<React.SetStateAction<boolean>>;
-  toggleDarkmode: () => void;
-  checked: boolean;
-  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
-  createCommunityPopup: boolean;
-  createCommunityPopupVisible: boolean;
-  createCommunityPopupRef: React.RefObject<HTMLDivElement | null>;
-  setDisableCommunityPopup: React.Dispatch<React.SetStateAction<boolean>>;
-  toggleCreateCommunityPopup: () => void;
+  overlayOpen: boolean;
+  setOverlayOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  createTeamPopup: boolean;
+  createTeamPopupVisible: boolean;
+  createTeamPopupRef: React.RefObject<HTMLDivElement | null>;
+  setDisableTeamPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleCreateTeamPopup: () => void;
 }
 export const UtilsContext = createContext<UtilsContextType | null>(null);
 
@@ -38,39 +28,14 @@ export const UtilsProvider: React.FC<{ children: React.ReactNode }> = ({
     togglePopup: toggleAuthPopup,
     setDisableToggle: setDisableToggle,
   } = usePopup();
+  const [overlayOpen, setOverlayOpen] = useState(false);
   const {
-    isActive: createCommunityPopup,
-    isVisible: createCommunityPopupVisible,
-    ref: createCommunityPopupRef,
-    togglePopup: toggleCreateCommunityPopup,
-    setDisableToggle: setDisableCommunityPopup,
+    isActive: createTeamPopup,
+    isVisible: createTeamPopupVisible,
+    ref: createTeamPopupRef,
+    togglePopup: toggleCreateTeamPopup,
+    setDisableToggle: setDisableTeamPopup,
   } = usePopup();
-  const [isDarkmode, setIsDarkmode] = useState(true);
-  const [checked, setChecked] = useState(true);
-  useEffect(() => {
-    const storedPreference = localStorage.getItem("darkMode");
-
-    // Default to dark if nothing is stored
-    const darkModePreference =
-      storedPreference === null ? true : storedPreference === "true";
-
-    setIsDarkmode(darkModePreference);
-    setChecked(darkModePreference);
-
-    const root = document.documentElement;
-    root.setAttribute("data-theme", darkModePreference ? "dark" : "light");
-  }, []);
-
-  const toggleDarkmode = useCallback(() => {
-    const newMode = !isDarkmode;
-    document.documentElement.setAttribute(
-      "data-theme",
-      newMode ? "dark" : "light"
-    );
-    localStorage.setItem("darkMode", String(newMode));
-    setIsDarkmode(newMode);
-    setChecked(newMode);
-  }, [isDarkmode]);
 
   const providerValue = useMemo(
     () => ({
@@ -78,34 +43,28 @@ export const UtilsProvider: React.FC<{ children: React.ReactNode }> = ({
       authPopupRef,
       authPopupVisible,
       toggleAuthPopup,
-      toggleDarkmode,
-      isDarkmode,
-      setIsDarkmode,
-      checked,
-      setChecked,
-      createCommunityPopup,
-      createCommunityPopupRef,
-      createCommunityPopupVisible,
-      toggleCreateCommunityPopup,
+      createTeamPopup,
+      createTeamPopupRef,
+      createTeamPopupVisible,
+      toggleCreateTeamPopup,
       setDisableToggle,
-      setDisableCommunityPopup,
+      setDisableTeamPopup,
+      overlayOpen,
+      setOverlayOpen,
     }),
     [
       authPopup,
       authPopupRef,
       authPopupVisible,
       toggleAuthPopup,
-      toggleDarkmode,
-      isDarkmode,
-      setIsDarkmode,
-      checked,
-      setChecked,
-      createCommunityPopup,
-      createCommunityPopupRef,
-      createCommunityPopupVisible,
-      toggleCreateCommunityPopup,
+      createTeamPopup,
+      createTeamPopupRef,
+      createTeamPopupVisible,
+      toggleCreateTeamPopup,
       setDisableToggle,
-      setDisableCommunityPopup,
+      setDisableTeamPopup,
+      overlayOpen,
+      setOverlayOpen,
     ]
   );
 

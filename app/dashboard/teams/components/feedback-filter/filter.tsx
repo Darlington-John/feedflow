@@ -113,10 +113,6 @@ const FeedbackFilter = ({
           <span className="text-xs  text-silver-blue  sf-light ">
             {filteredFeedbacks?.length} feedbacks
           </span>
-          <div className="flex items-center gap-2 ">
-            <span className="text-xs  text-silver-blue  sf-light">Sort by</span>
-            {/* <SortBy {...sortProps} /> */}
-          </div>
         </div>
       </div>
       {!areAllFiltersDefault() && (

@@ -5,9 +5,11 @@ import { useUtilsContext } from "~/app/context/utils-context";
 import { usePopup } from "~/lib/utils/toggle-popups";
 import ProfileMenu from "./profile-menu";
 import LogoutPrompt from "./logout-prompt";
-import { FaSearch } from "react-icons/fa";
 import { FaRegBell } from "react-icons/fa";
 import logo from "~/public/images/logo.svg";
+import { toggleOverlay } from "~/lib/utils/toggle-overlay";
+import { FaPlus } from "react-icons/fa6";
+import { IoMdClose, IoMdMenu } from "react-icons/io";
 const Header = () => {
   const { user } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -24,25 +26,35 @@ const Header = () => {
     ref: logoutPromptRef,
     togglePopup: toggleLogoutPrompt,
   } = usePopup();
+
+  const { overlayOpen, setOverlayOpen } = useUtilsContext();
+
+  const handleToggleOverlay = () => {
+    toggleOverlay();
+    setOverlayOpen(!overlayOpen);
+  };
+  const { toggleCreateTeamPopup } = useUtilsContext();
   return (
-    <header className="flex items-center justify-between w-[calc(100vw-5px)]  px-4 py-2 bg-navy  border-b-grey border-b-2  fixed top-0   z-1000">
+    <header className="flex items-center justify-between w-[calc(100vw-5px)]  px-4 py-2 bg-navy  border-b-grey border-b-2  fixed top-0   z-1000 max-sm:py-1  max-xs:px-2">
       <div className="flex items-center  gap-1 ">
-        <Image src={logo} alt="drlix_logo" className="w-10" />
-        <h1 className="text-3xl  sf-bold  text-white">feedflow</h1>
+        <Image src={logo} alt="drlix_logo" className="w-10 max-sm:w-7" />
+        <h1 className="text-3xl  sf-bold  text-white max-sm:text-2xl">
+          feedflow
+        </h1>
       </div>
-      <div className="flex items-center justify-center h-10 rounded-full  relative">
-        <FaSearch className="w-5 absolute  pointer-events-none left-4 text-silver-blue " />
-        <input
-          className="w-[550px]  h-10  bg-grey  pl-10  text-sm  sf-light  focus:ring-2 ring-white  rounded-full text-white"
-          type="text "
-          placeholder="Search feedflow"
-        />
-      </div>
+
       <div className="flex items-center gap-0">
         {user ? (
           <>
+            <button
+              className="flex items-center gap-1  hover:bg-grey h-[35px] rounded-full px-2 text-sm  max-sm:h-[35px] text-silver-blue  hover:text-white  duration-150 max-xs:hidden"
+              onClick={toggleCreateTeamPopup}
+            >
+              <FaPlus />
+              <span>New team</span>
+            </button>
             <button className="hover:bg-grey py-2 px-2 rounded-full ">
-              <FaRegBell className=" text-silver-blue" size={20} />
+              <FaRegBell className=" text-silver-blue text-xl max-sm:text-base" />
             </button>
             <div className="relative">
               <button
@@ -52,7 +64,7 @@ const Header = () => {
                 {/* eslint-disable */}
                 <img
                   src={user?.profile ? user.profile : "/icons/user-circle.svg"}
-                  className="w-8 h-8  rounded-full overflow-hidden "
+                  className="w-8 h-8  rounded-full overflow-hidden  text-xl max-sm:w-7 text-xl max-sm:h-7"
                   alt="pointer"
                 />
               </button>
@@ -80,6 +92,16 @@ const Header = () => {
             </button>
           </div>
         )}
+        <button
+          className="bg-grey p-1  rounded-full  hidden max-md:flex"
+          onClick={handleToggleOverlay}
+        >
+          {overlayOpen ? (
+            <IoMdClose className="text-xl text-silver-blue " />
+          ) : (
+            <IoMdMenu className="text-xl text-silver-blue" />
+          )}
+        </button>
       </div>
     </header>
   );

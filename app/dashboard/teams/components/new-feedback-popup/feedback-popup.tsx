@@ -9,11 +9,14 @@ import { useAuthContext } from "~/app/context/auth-context";
 import { useUtilsContext } from "~/app/context/utils-context";
 import { apiRequest } from "~/lib/utils/api-request";
 import { FaLightbulb } from "react-icons/fa6";
-import { FaBug, FaChevronDown } from "react-icons/fa";
+import { FaBug, FaCheck, FaChevronDown } from "react-icons/fa";
 import { usePopup } from "~/lib/utils/toggle-popups";
 import { TiStarburst } from "react-icons/ti";
 import PriorityRating from "./priority";
 import TextEditor from "~/app/dashboard/components/text-editor/text-editor";
+import { useDispatch } from "react-redux";
+import { addFeedback } from "~/lib/redux/slices/feedbacks";
+import { feedback_type } from "~/lib/types/feedback";
 
 interface props {
   newFeedbackPopup: boolean;
@@ -21,6 +24,7 @@ interface props {
   newFeedbackPopupRef: React.RefObject<HTMLDivElement | null>;
   toggleNewFeedbackPopup: () => void;
   disableNewFeedbackPopup: React.Dispatch<React.SetStateAction<boolean>>;
+  setFeedbacksCount: React.Dispatch<React.SetStateAction<number>>;
 }
 const NewFeedbackPopup = ({
   newFeedbackPopup,
@@ -28,6 +32,7 @@ const NewFeedbackPopup = ({
   newFeedbackPopupRef,
   toggleNewFeedbackPopup,
   disableNewFeedbackPopup,
+  setFeedbacksCount,
 }: props) => {
   const { user } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -64,7 +69,7 @@ const NewFeedbackPopup = ({
 
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState<JSONContent | null>(null);
-  const [priority, setPriority] = useState(3);
+  const [priority, setPriority] = useState(1);
 
   const hasValidContent = (nodes: JSONContent[]): boolean => {
     return nodes?.some((node) => {
@@ -78,6 +83,7 @@ const NewFeedbackPopup = ({
       return false;
     });
   };
+  const dispatch = useDispatch();
   const createFeedback = async () => {
     if (!user) {
       toggleAuthPopup();
@@ -109,8 +115,20 @@ const NewFeedbackPopup = ({
       },
       onSuccess: (res) => {
         setSucessful(true);
-        window.dispatchEvent(new CustomEvent("refreshFeedbacks"));
-        toast.success(res.message);
+        const newFeedback: feedback_type = {
+          ...res.feedback,
+          by: {
+            role: res.role,
+            _id: user?._id,
+            username: user?.username,
+            profile: user?.profile,
+          },
+        };
+        dispatch(addFeedback(newFeedback));
+        setFeedbacksCount((prev) => prev + 1);
+        toast.success(res.message, {
+          icon: <FaCheck color="white" />,
+        });
         setTimeout(() => {
           toggleNewFeedbackPopup();
           setTitle("");

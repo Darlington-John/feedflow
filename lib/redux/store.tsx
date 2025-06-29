@@ -1,13 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-
+import feedbacksReducer from "./slices/feedbacks";
 export const store = configureStore({
   reducer: {
-    // comments: commentReducer,
-    // communities: communitiesReducer,
-    // recent_communities: recent_CommunitiesReducer,
-    // user_posts: user_PostsReducer,
-    // user_comments: user_CommentsReducer,
-    // user_saved_posts: user_SavedPostsReducer,
+    feedbacks: feedbacksReducer,
   },
 });
 

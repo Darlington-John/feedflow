@@ -56,7 +56,7 @@ const TeamMenu = () => {
   } = usePopup();
   return (
     <>
-      <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4 ">
+      <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static">
         {hasError ? (
           <div className="flex h-[200px] items-center justify-center ">
             <div className="flex flex-col gap-1">
@@ -74,62 +74,63 @@ const TeamMenu = () => {
           </div>
         ) : (
           <>
-            <div className="flex items-center gap-3 cursor-pointer">
-              {team?.icon ? (
-                //  eslint-disable-next-line
-                <img
-                  src={team?.icon}
-                  className=" rounded-full object-cover  w-20  h-20  ring ring-grey"
-                  alt=""
-                />
-              ) : (
-                <div className="items-center justify-center  flex  rounded-full bg-grey w-20  h-20   ring ring-grey">
-                  <HiUserGroup size={50} />
+            <div className="flex flex-col  gap-4  max-2xl:flex-1 ">
+              <div className="flex items-center gap-3 cursor-pointer  ">
+                {team?.icon ? (
+                  //  eslint-disable-next-line
+                  <img
+                    src={team?.icon}
+                    className=" rounded-full object-cover  w-20  h-20  ring ring-grey"
+                    alt=""
+                  />
+                ) : (
+                  <div className="items-center justify-center  flex  rounded-full bg-grey w-20  h-20   ring ring-grey">
+                    <HiUserGroup size={50} />
+                  </div>
+                )}
+                <div className="flex flex-col text-silver-blue leading-none">
+                  <h1 className="text-2xl sf-bold">{team?.name}</h1>
+                  {team?.members && (
+                    <h1 className="text-sm">
+                      {team?.members.length}{" "}
+                      {team?.members.length > 1 ? "members" : "member"}
+                    </h1>
+                  )}
                 </div>
-              )}
-              <div className="flex flex-col text-silver-blue leading-none">
-                <h1 className="text-2xl sf-bold">{team?.name}</h1>
-                {team?.members && (
-                  <h1 className="text-sm">
-                    {team?.members.length}{" "}
-                    {team?.members.length > 1 ? "members" : "member"}
+              </div>
+              <div className="flex flex-col gap-1 ">
+                {team?.description && (
+                  <h1 className="text-[13px] text-silver-blue  text-start sf-light">
+                    {team.description}
                   </h1>
                 )}
-              </div>
-            </div>
-            <div className="flex flex-col gap-1 ">
-              {team?.description && (
-                <h1 className="text-[13px] text-silver-blue  text-start sf-light">
-                  {team.description}
-                </h1>
-              )}
 
-              <h1 className="text-xs text-fade-blue text-start ">
-                • Created {formatDate(team?.createdAt as string)}
-              </h1>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="flex flex-col  gap-1">
-                <span className="text-white text-sm">
-                  {team?.super_admins.length ?? 0}
-                </span>
-                <h1 className="text-silver-blue leading-none  text-xs">
-                  Super admins
+                <h1 className="text-xs text-fade-blue text-start ">
+                  • Created {formatDate(team?.createdAt as string)}
                 </h1>
               </div>
-              <div className="flex flex-col  gap-1">
-                <span className="text-white text-sm ">
-                  {team?.admins.length ?? 0}
-                </span>
-                <h1 className="text-silver-blue leading-none text-xs">
-                  Admins
-                </h1>
+              <div className="flex items-center gap-6">
+                <div className="flex flex-col  gap-1">
+                  <span className="text-white text-sm">
+                    {team?.super_admins.length ?? 0}
+                  </span>
+                  <h1 className="text-silver-blue leading-none  text-xs">
+                    Super admins
+                  </h1>
+                </div>
+                <div className="flex flex-col  gap-1">
+                  <span className="text-white text-sm ">
+                    {team?.admins.length ?? 0}
+                  </span>
+                  <h1 className="text-silver-blue leading-none text-xs">
+                    Admins
+                  </h1>
+                </div>
               </div>
             </div>
-
             {team?.admins.includes(user?._id as string) ||
               (team?.super_admins.includes(user?._id as string) && (
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-col gap-2 w-full max-2xl:flex-1 ">
                   <button
                     className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
                     onClick={toggleNamePopup}

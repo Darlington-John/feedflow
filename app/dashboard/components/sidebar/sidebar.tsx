@@ -29,7 +29,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className=" w-[300px] bg-navy  border-r  border-r-grey px-4 py-4   max-h-[calc(100vh-57px)] min-h-[calc(100vh-57px)]  mt-[57px]  items-center   flex flex-col divide-y  overflow-auto sidebar">
+    <div className=" w-[300px] bg-navy  border-r  border-r-grey px-4 py-4   max-h-[calc(100vh-57px)] min-h-[calc(100vh-57px)]  mt-[57px]  items-center   flex flex-col divide-y  overflow-auto sidebar max-md:hidden">
       <div className="flex flex-col w-full  gap-1">
         <Link
           href={"/dashboard"}

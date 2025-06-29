@@ -9,12 +9,14 @@ import { IoSearch } from "react-icons/io5";
 import { feedback_type } from "~/lib/types/feedback";
 import { useAuthContext } from "~/app/context/auth-context";
 import { useState } from "react";
+import { useParams } from "next/navigation";
 interface props {
   feed: feedback_type;
   toggleMarkOpen: () => void;
 }
 const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
   const { user } = useAuthContext();
+  const { team_id } = useParams();
   const { toggleAuthPopup } = useUtilsContext();
   const saveReaction = async (action: "like" | "dislike") => {
     if (!action) {
@@ -25,16 +27,21 @@ const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
     }
 
     await apiRequest({
-      url: action === "like" ? "/api/post/like" : "/api/post/dislike",
+      url:
+        action === "like"
+          ? ` /api/teams/${team_id}/like-feedback`
+          : `/api/teams/${team_id}/dislike-feedback`,
       method: "PATCH",
       body: {
-        postId: feed._id,
+        feedId: feed._id,
         userId: user?._id,
       },
       onSuccess: (response) => {
         setLikes(response.likes);
         setDislikes(response.dislikes);
-        toast.success(action === "like" ? "Post Liked" : "Post Disliked");
+        toast.success(action === "like" ? "Post Liked" : "Post Disliked", {
+          icon: <FaCheck color="white" />,
+        });
       },
       onError: () => {
         toast.error(action === "like" ? "Post not liked" : "Post not disliked");

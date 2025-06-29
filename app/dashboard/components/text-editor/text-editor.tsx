@@ -45,7 +45,7 @@ const TextEditor = ({
   });
 
   return (
-    <div className="flex  flex-col gap-4         rounded-xl      duration-150 relative  w-full">
+    <div className="flex  flex-col gap-4         rounded-xl      duration-150 relative  w-full  editor">
       {editor && <MenuBar editor={editor} />}
       <EditorContent editor={editor} />
     </div>

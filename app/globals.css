@@ -18,16 +18,17 @@
   --color-fade-blue:#4696dd;
   --color-silver-blue: #b7cad4;
   --color-magenta:#DE019F;
-  --breakpoint-4xl: 100rem;
-  --breakpoint-3xl: 95.9375rem;
-  --breakpoint-2xl: 87.5rem;
-  --breakpoint-xl: 79.9375rem;
-  --breakpoint-lg: 63.9375rem;
-  --breakpoint-md: 47.9375rem;
-  --breakpoint-sm: 39.9375rem;
-  --breakpoint-xs: 35.9375rem;
-  --breakpoint-2xs: 31.25rem;
-  --breakpoint-3xs: 25rem;
+  --breakpoint-4xl: 100rem; /* 1600px */
+  --breakpoint-3xl: 95.9375rem; /* 1535px */
+  --breakpoint-2xl: 87.5rem; /* 1400px */
+  --breakpoint-xl: 79.9375rem; /* 1279px */
+  --breakpoint-lg: 63.9375rem; /* 1023px */
+  --breakpoint-md: 47.9375rem; /* 767px */
+  --breakpoint-sm: 39.9375rem; /* 639px */
+  --breakpoint-xs: 35.9375rem; /* 575px */
+  --breakpoint-2xs: 31.25rem; /* 500px */
+  --breakpoint-3xs: 25rem; /* 400px */
+
 
 }
 
@@ -66,11 +67,11 @@ input:-webkit-autofill:active {
 }
 
 ::-webkit-scrollbar-track {
-  background: #2C2C2C; 
+  background: #091926; 
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D1D1D1; 
+  background: #1C3A4D; 
   border-radius: 30px;
 }
 
@@ -187,5 +188,5 @@ input:-webkit-autofill:active {
     margin-top:10px ;
     margin-bottom:10px ;
   max-width: 200px;
-  max-height: 400px;
+  max-height: 200px;
   }

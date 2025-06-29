@@ -36,7 +36,7 @@ export default function RootLayout({
 
   return (
     <div className="w-full  min-h-[100vh]  p-5 bg-navy  main justify-center   flex ">
-      <div className="w-[1100px]  flex  gap-8  divide-y divide-grey bg-navy  items-start ">
+      <div className="w-[1100px]  flex  gap-8  divide-y divide-grey bg-navy  items-start  max-2xl:flex-col ">
         <div className="flex flex-col w-full  min-h-screeen">
           {query !== "invite" && (
             <div className="flex  items-center gap-6">

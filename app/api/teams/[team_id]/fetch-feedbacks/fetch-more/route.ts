@@ -13,6 +13,8 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get("userId");
     const { team_id } = await params;
+    const skip = parseInt(searchParams.get("skip") || "0", 10);
+    const limit = parseInt(searchParams.get("limit") || "1", 1);
     if (!userId) {
       return NextResponse.json(
         { error: "UserId not provided" },
@@ -40,7 +42,8 @@ export async function GET(
     }
     const feedbacks = await Feedback.find({ team: team_id })
       .sort({ createdAt: -1 })
-      .limit(1)
+      .skip(skip)
+      .limit(limit)
       .populate({
         path: "by",
         select: "username profile",
@@ -49,7 +52,6 @@ export async function GET(
         path: "status.marked_by",
         select: "username profile",
       });
-    const feedbacks_count = await Feedback.countDocuments({ team: team_id });
     const adminIds = team.admins.map((id) => id.toString());
     const superAdminIds = team.super_admins.map((id) => id.toString());
 
@@ -79,9 +81,8 @@ export async function GET(
 
     return NextResponse.json(
       {
-        message: "Feedbacks fetched",
+        message: "More Feedbacks fetched",
         result: feedbacksWithRole,
-        feedbacks_count: feedbacks_count,
       },
       { status: 200 }
     );

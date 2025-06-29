@@ -8,6 +8,7 @@ import ClassicInput from "~/app/dashboard/components/inputs/classic-inputs";
 import { useAuthContext } from "~/app/context/auth-context";
 import { useUtilsContext } from "~/app/context/utils-context";
 import { apiRequest } from "~/lib/utils/api-request";
+import { FaCheck } from "react-icons/fa";
 
 interface props {
   newTeamPopup: boolean;
@@ -56,7 +57,9 @@ const NewTeamPopup = ({
       },
       onSuccess: (res) => {
         setSucessful(true);
-        toast.success(res.message);
+        toast.success(res.message, {
+          icon: <FaCheck color="white" />,
+        });
         setTimeout(() => {
           toggleNewTeamPopup();
           setTeamName("");

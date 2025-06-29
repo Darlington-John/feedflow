@@ -2,15 +2,19 @@ import { FaPlus } from "react-icons/fa6";
 import NewFeedbackPopup from "../components/new-feedback-popup/feedback-popup";
 import { usePopup } from "~/lib/utils/toggle-popups";
 import { useParams } from "next/navigation";
-import { usePageFetch } from "~/lib/utils/fetch-page-data";
-import { feedback_type } from "~/lib/types/feedback";
 import logo from "~/public/images/logo.svg";
 import Image from "next/image";
 import Loader from "../../components/loader";
 import { useAuthContext } from "~/app/context/auth-context";
 import FeedbackCard from "../components/feedback-card/feedback-card";
 import FeedbackFilter from "../components/feedback-filter/filter";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "~/lib/redux/store";
+import { apiRequest } from "~/lib/utils/api-request";
+import { addMoreFeedbacks, setFeedbacks } from "~/lib/redux/slices/feedbacks";
+import { toast } from "react-toastify";
+import AsyncButton from "../../components/buttons/async-button";
 const Feedbacks = () => {
   const {
     isActive: feedbackPopup,
@@ -22,21 +26,80 @@ const Feedbacks = () => {
 
   const { user } = useAuthContext();
   const { team_id } = useParams();
-  const {
-    fetchedData: feedbacks,
-    isFetching,
-    hasError,
-    error,
-  } = usePageFetch<feedback_type[]>({
-    basePath: `/api/teams/${team_id}/fetch-feedbacks?userId=${user?._id}`,
-    eventKey: "refreshFeedbacks",
-    dep: team_id,
-    enabled: !!user?._id,
-  });
+
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState("");
+  const [fetchingError, setFetchingError] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const feedbacks = useSelector(
+    (state: RootState) => state.feedbacks.feedbacks
+  );
+
+  const [feedbacksCount, setFeedbacksCount] = useState(0);
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      setLoading(true);
+      await apiRequest({
+        method: "GET",
+        url: `/api/teams/${team_id}/fetch-feedbacks?userId=${user?._id}`,
+        onSuccess: (res) => {
+          dispatch(setFeedbacks(res.result));
+          setFetchingError(false);
+          setFeedbacksCount(res.feedbacks_count);
+        },
+        onError: (error) => {
+          setFetchError(error);
+          setFetchingError(true);
+        },
+        onFinally: () => {
+          setLoading(false);
+        },
+      });
+    };
+
+    fetchFeedbacks();
+  }, [dispatch, user?._id, team_id]);
+  const [skip, setSkip] = useState(feedbacks?.length);
+  const [showMore, setShowMore] = useState(
+    (feedbacksCount as number) > feedbacks?.length
+  );
+
+  useEffect(() => {
+    setSkip(feedbacks?.length);
+    setShowMore((feedbacksCount as number) > feedbacks?.length);
+  }, [feedbacks?.length, feedbacksCount]);
+  const [moreFeedbacksLoading, setMoreFeedbacksLoading] = useState(false);
+  const [moreFeedbacksSuccess, setMoreFeedbacksSuccess] = useState(false);
+  const loadMoreFeedbacks = async () => {
+    setMoreFeedbacksLoading(true);
+    await apiRequest({
+      method: "GET",
+      url: `/api/teams/${team_id}/fetch-feedbacks/fetch-more?skip=${skip}&userId=${user?._id}`,
+      onSuccess: (res) => {
+        setMoreFeedbacksSuccess(true);
+        const newFeedbacks = res.result;
+        const newSkip = skip + newFeedbacks.length;
+        setSkip(newSkip);
+        setShowMore(newSkip < feedbacks.length);
+        dispatch(addMoreFeedbacks(newFeedbacks));
+
+        setTimeout(() => {
+          setMoreFeedbacksSuccess(false);
+        }, 2000);
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(`Could'nt fetch more feedbacks`);
+      },
+      onFinally: () => {
+        setMoreFeedbacksLoading(false);
+      },
+    });
+  };
   const [selectedTag, setSelectedTag] = useState("All");
   const [selectedPriority, setSelectedPriority] = useState("All");
   const [selectedRole, setSelectedRole] = useState("All");
-  console.log("feedback", feedbacks);
   const handleTagClick = (tag: string) => {
     setSelectedTag(tag);
   };
@@ -78,17 +141,27 @@ const Feedbacks = () => {
     const isRoleDefault = selectedRole === "All";
     return !(!isTagDefault || !isPriorityDefault! || !isRoleDefault);
   };
+
   return (
     <>
-      <Loader fetching={isFetching} errorFetching={hasError} error={error}>
+      <Loader
+        fetching={loading}
+        errorFetching={fetchingError}
+        error={fetchError}
+      >
         <div className="flex items-start  w-full flex-col gap-2">
           <div className="flex items-center justify-between w-full">
-            <h1 className="text-xl sf-light text-silver-blue ">
-              Feedbacks: 24
-            </h1>
+            {feedbacksCount > 0 && (
+              <h1 className="text-xl sf-light text-silver-blue ">
+                Total Feedbacks: {feedbacksCount}
+              </h1>
+            )}
+
             <button
               className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150"
-              onClick={toggleFeedbackPopup}
+              onClick={() => {
+                toggleFeedbackPopup();
+              }}
             >
               <FaPlus size={20} />
               <h1 className="text-sm  ">Give feedback</h1>
@@ -116,7 +189,7 @@ const Feedbacks = () => {
                 <FeedbackCard feed={feed} key={feed._id} />
               ))
             ) : (
-              <div className="min-h-[50vh]  flex  items-center justify-center flex-col gap-2">
+              <div className="min-h-[50vh]  flex  items-center justify-center flex-col gap-2  mx-auto">
                 <Image src={logo} className="w-16" alt="logo" />
                 <h1 className="text-lg   text-center text-light-blue">
                   No feedbacks yet
@@ -142,6 +215,16 @@ const Feedbacks = () => {
               </p>
             </div>
           )}
+          {showMore && (
+            <AsyncButton
+              action="+View  more posts"
+              loading={moreFeedbacksLoading}
+              success={moreFeedbacksSuccess}
+              classname_overide="max-w-34 !h-[30px] text-xs "
+              onClick={loadMoreFeedbacks}
+              disabled={feedbacksCount === feedbacks.length}
+            />
+          )}
         </div>
       </Loader>
       <NewFeedbackPopup
@@ -150,6 +233,7 @@ const Feedbacks = () => {
         newFeedbackPopupRef={feedbackRef}
         disableNewFeedbackPopup={disableFeedbackPopup}
         toggleNewFeedbackPopup={toggleFeedbackPopup}
+        setFeedbacksCount={setFeedbacksCount}
       />
     </>
   );
