@@ -11,7 +11,7 @@ import { toggleOverlay } from "~/lib/utils/toggle-overlay";
 import { FaPlus } from "react-icons/fa6";
 import { IoMdClose, IoMdMenu } from "react-icons/io";
 const Header = () => {
-  const { user } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
   const {
     isVisible: isProfileMenuVisible,
@@ -44,54 +44,58 @@ const Header = () => {
       </div>
 
       <div className="flex items-center gap-0">
-        {user ? (
-          <>
-            <button
-              className="flex items-center gap-1  hover:bg-grey h-[35px] rounded-full px-2 text-sm  max-sm:h-[35px] text-silver-blue  hover:text-white  duration-150 max-xs:hidden"
-              onClick={toggleCreateTeamPopup}
-            >
-              <FaPlus />
-              <span>New team</span>
-            </button>
-            <button className="hover:bg-grey py-2 px-2 rounded-full ">
-              <FaRegBell className=" text-silver-blue text-xl max-sm:text-base" />
-            </button>
-            <div className="relative">
+        {!loading &&
+          (user ? (
+            <>
               <button
-                className="hover:bg-grey py-1  px-1  rounded-full "
-                onClick={toggleProfileMenu}
+                className="flex items-center gap-1  hover:bg-grey h-[35px] rounded-full px-2 text-sm  text-silver-blue  hover:text-white  duration-150 max-xs:hidden"
+                onClick={toggleCreateTeamPopup}
               >
-                {/* eslint-disable */}
-                <img
-                  src={user?.profile ? user.profile : "/icons/user-circle.svg"}
-                  className="w-8 h-8  rounded-full overflow-hidden  text-xl max-sm:w-7 text-xl max-sm:h-7"
-                  alt="pointer"
-                />
+                <FaPlus />
+                <span>New team</span>
               </button>
-              <ProfileMenu
-                isProfileMenuVisible={isProfileMenuVisible}
-                profileMenu={profileMenu}
-                profileMenuRef={profileMenuRef}
-                toggleLogoutPrompt={toggleLogoutPrompt}
-              />
-              <LogoutPrompt
-                isLogoutPromptVisible={isLogoutPromptVisible}
-                logoutPrompt={logoutPrompt}
-                logoutPromptRef={logoutPromptRef}
-                togglePopup={toggleLogoutPrompt}
-              />
+              <button className="hover:bg-grey py-2 px-2 rounded-full ">
+                <FaRegBell className=" text-silver-blue text-xl max-sm:text-base" />
+              </button>
+              <div className="relative">
+                <button
+                  className="hover:bg-grey py-1  px-1  rounded-full "
+                  onClick={toggleProfileMenu}
+                >
+                  {/* eslint-disable */}
+                  <img
+                    src={
+                      user?.profile ? user.profile : "/icons/user-circle.svg"
+                    }
+                    className="w-8 h-8  rounded-full overflow-hidden  text-xl max-sm:w-7 text-xl max-sm:h-7"
+                    alt="pointer"
+                  />
+                </button>
+                <ProfileMenu
+                  isProfileMenuVisible={isProfileMenuVisible}
+                  profileMenu={profileMenu}
+                  profileMenuRef={profileMenuRef}
+                  toggleLogoutPrompt={toggleLogoutPrompt}
+                />
+                <LogoutPrompt
+                  isLogoutPromptVisible={isLogoutPromptVisible}
+                  logoutPrompt={logoutPrompt}
+                  logoutPromptRef={logoutPromptRef}
+                  togglePopup={toggleLogoutPrompt}
+                />
+              </div>
+            </>
+          ) : (
+            <div className="flex items-center px-2 ">
+              <button
+                className=" bg-powder-blue  hover:bg-[#0985bf]  px-3   rounded-full h-[35px]  max-w-sm:h-[30px] text-sm text-white duration-100 "
+                onClick={toggleAuthPopup}
+              >
+                Sign in
+              </button>
             </div>
-          </>
-        ) : (
-          <div className="flex items-center">
-            <button
-              className=" bg-powder-blue  hover:bg-[#0985bf]  px-4   rounded-full h-[40px] text-sm text-white duration-100 "
-              onClick={toggleAuthPopup}
-            >
-              Log in
-            </button>
-          </div>
-        )}
+          ))}
+
         <button
           className="bg-grey p-1  rounded-full  hidden max-md:flex"
           onClick={handleToggleOverlay}

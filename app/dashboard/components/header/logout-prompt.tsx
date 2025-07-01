@@ -5,6 +5,7 @@ import waving from "~/public/images/waving-hand-svgrepo-com.svg";
 import { toast } from "react-toastify";
 import { FaCheck } from "react-icons/fa";
 import AsyncButton from "../buttons/async-button";
+import { useRouter } from "next/navigation";
 interface promptProp {
   isLogoutPromptVisible: boolean;
   logoutPrompt: boolean;
@@ -20,7 +21,7 @@ const LogoutPrompt = ({
   const [clearing, setClearing] = useState(false);
   const [sucessful, setSucessful] = useState(false);
   const [error, setError] = useState("");
-
+  const router = useRouter();
   const clearCookies = async () => {
     setClearing(true);
     setError("");
@@ -29,7 +30,7 @@ const LogoutPrompt = ({
       method: "POST",
       onSuccess: () => {
         window.dispatchEvent(new CustomEvent("userUpdated"));
-
+        router.push("/");
         toast.success("Log out successful", {
           icon: <FaCheck color="white" />,
         });
@@ -59,7 +60,7 @@ const LogoutPrompt = ({
   return (
     logoutPrompt && (
       <div
-        className={`fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-50  px-8     xs:px-0 `}
+        className={`fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-40  px-8     xs:px-0 `}
       >
         <div
           className={`w-[300px]     mid-popup   duration-300 ease-in-out flex flex-col py-6 px-6  gap-4   rounded-lg bg-navy   items-center      ${
@@ -68,12 +69,12 @@ const LogoutPrompt = ({
           ref={logoutPromptRef}
         >
           <div className="flex flex-col  items-center">
-            <Image src={waving} className="w-20" alt="" />
+            <Image src={waving} className="w-16" alt="" />
             <div className="flex flex-col gap-2">
-              <h1 className="text-[27px]     text-center text-white">
+              <h1 className="text-xl     text-center text-white">
                 See you soon
               </h1>
-              <p className="text-sm sf-light  text-center text-light-blue">
+              <p className="text-sm sf-light  text-center text-silver-blue">
                 You are about to logout.
                 <br />
                 Are you sure that&apos;s what you want?
@@ -84,8 +85,8 @@ const LogoutPrompt = ({
           <div className="flex items-center gap-2  w-full">
             <AsyncButton
               onClick={clearCookies}
-              action="Confirm logout"
-              classname_overide="h-[40px] hover:ring  hover:ring-powder-blue  hover:ring-offset-1   text-sm duration-300  rounded-md"
+              action="Logout"
+              classname_overide="!h-[35px] hover:ring  hover:ring-powder-blue  hover:ring-offset-1   text-sm duration-300  rounded-md"
               loading={clearing}
               disabled={clearing}
               success={sucessful}
@@ -95,9 +96,9 @@ const LogoutPrompt = ({
               onClick={() => {
                 togglePopup();
               }}
-              className="bg-grey   text-white px-4 h-[40px]  rounded-md  hover:ring-[2px] hover:ring-offset-1  ring-grey   duration-300  gap-1 sf-light   text-xs w-[40%] "
+              className="bg-grey   text-white px-4 h-[35px]  rounded-md  hover:ring-[2px] hover:ring-offset-1  ring-grey   duration-300  gap-1 sf-light   text-sm w-[45%] "
             >
-              CANCEL
+              Cancel
             </button>
           </div>
         </div>

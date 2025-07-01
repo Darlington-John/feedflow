@@ -87,7 +87,7 @@ const ClassicInput = <T extends string | number>({
       {!textarea && (
         <div className="flex  items-center justify-center relative w-full">
           <input
-            className={`  ${classname_overide} h-[45px] py-1 px-3 bg-grey  text-white   text-sm    focus:ring-[1px]    ring-grey-blue   outline-none w-full  duration-150  ${
+            className={`  ${classname_overide} h-[45px] py-1 px-3 bg-grey  text-white   text-sm    focus:ring-[1px]    ring-grey-blue   outline-none w-full  duration-150 max-sm:h-[40px]  ${
               error && serverError?.includes(error) && "border-red border-2"
             }     ${
               error === errorContent && !value

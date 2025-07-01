@@ -1,51 +1,24 @@
 "use client";
 import { usePopup } from "~/lib/utils/toggle-popups";
-import TagsFilter from "./by-tag";
-import { feedback_type } from "~/lib/types/feedback";
 import { FaXmark } from "react-icons/fa6";
-import PriorityFilter from "./by-priority";
-import RolesFilter from "./by-role";
+import RolesFilter from "../feedback-filter/by-role";
+import { member_type } from "~/lib/types/member";
 
 interface filterProps {
-  handleTagClick: (tag: string) => void;
-  selectedTag: string;
-  handlePriorityClick: (priority: string) => void;
-  setSelectedTag: React.Dispatch<React.SetStateAction<string>>;
   areAllFiltersDefault: () => boolean;
-  filteredFeedbacks: feedback_type[] | undefined;
-  selectedPriority: string;
-  setSelectedPriority: React.Dispatch<React.SetStateAction<string>>;
+  filteredMembers: member_type[] | undefined;
   selectedRole: string;
   setSelectedRole: React.Dispatch<React.SetStateAction<string>>;
-
   handleRoleClick: (role: string) => void;
 }
 
-const FeedbackFilter = ({
-  handleTagClick,
-  selectedTag,
-  setSelectedTag,
+const MembersFilter = ({
   areAllFiltersDefault,
-  filteredFeedbacks,
-  selectedPriority,
-  setSelectedPriority,
-  handlePriorityClick,
+  filteredMembers,
   selectedRole,
   setSelectedRole,
   handleRoleClick,
 }: filterProps) => {
-  const {
-    isVisible: isTagPopVisible,
-    isActive: tagPop,
-    ref: tagPopRef,
-    togglePopup: toggleTagPop,
-  } = usePopup();
-  const {
-    isVisible: isPriorityPopVisible,
-    isActive: priorityPop,
-    ref: priorityPopRef,
-    togglePopup: togglePriorityPop,
-  } = usePopup();
   const {
     isVisible: isRolePopVisible,
     isActive: rolePop,
@@ -57,50 +30,18 @@ const FeedbackFilter = ({
     {
       id: 1,
       hidden_state: "All",
-      type: "Tag",
-      state: selectedTag,
-      set_state: setSelectedTag,
-    },
-    {
-      id: 1,
-      hidden_state: "All",
-      type: "Priority",
-      state: selectedPriority,
-      set_state: setSelectedPriority,
-    },
-    {
-      id: 1,
-      hidden_state: "All",
       type: "Role",
       state: selectedRole,
       set_state: setSelectedRole,
     },
   ];
   const handleClearFilters = () => {
-    setSelectedTag("All");
-    setSelectedPriority("All");
-    setSelectedRole("All");
+    setSelectedRole("");
   };
   return (
     <div className="flex w-full flex-col gap-0">
       <div className="py-3 border-t border-t-grey  flex items-center justify-between w-full  max-lg:py-5  max-xs:flex-col  max-xs:gap-3">
         <div className="flex items-center gap-3 w-full">
-          <TagsFilter
-            toggleFilterPop={toggleTagPop}
-            isFilterPopVisible={isTagPopVisible}
-            filterPop={tagPop}
-            filterPopRef={tagPopRef}
-            selectedTag={selectedTag}
-            handleTagClick={handleTagClick}
-          />
-          <PriorityFilter
-            toggleFilterPop={togglePriorityPop}
-            isFilterPopVisible={isPriorityPopVisible}
-            filterPop={priorityPop}
-            filterPopRef={priorityPopRef}
-            selectedPriority={selectedPriority}
-            handlePriorityClick={handlePriorityClick}
-          />
           <RolesFilter
             toggleFilterPop={toggleRolePop}
             isFilterPopVisible={isRolePopVisible}
@@ -112,7 +53,7 @@ const FeedbackFilter = ({
         </div>
         <div className="flex items-center gap-2  shrink-0 max-xs:self-start">
           <span className="text-xs  text-silver-blue  sf-light ">
-            {filteredFeedbacks?.length} feedbacks
+            {filteredMembers?.length} feedbacks
           </span>
         </div>
       </div>
@@ -145,4 +86,4 @@ const FeedbackFilter = ({
   );
 };
 
-export default FeedbackFilter;
+export default MembersFilter;

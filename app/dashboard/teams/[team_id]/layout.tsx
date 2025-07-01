@@ -28,10 +28,6 @@ export default function RootLayout({
       query: "members",
       to: "Members",
     },
-    {
-      query: "saved",
-      to: "Saved posts",
-    },
   ];
 
   return (

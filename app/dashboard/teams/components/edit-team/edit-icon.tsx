@@ -97,7 +97,7 @@ const EditIcon = ({
 
   return (
     isActive && (
-      <div className="fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-50  px-8     xs:px-0  ">
+      <div className="fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-40  px-8     xs:px-0  ">
         {selecting ? (
           <UploadProfile
             selecting={selecting}

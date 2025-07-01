@@ -149,22 +149,22 @@ const NewFeedbackPopup = ({
   return (
     newFeedbackPopup && (
       <div
-        className={`fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-50  px-8     xs:px-0 `}
+        className={`fixed top-[0px]  h-full w-full  z-50 left-0 flex  justify-center  items-center        backdrop-brightness-40  px-8    `}
       >
         <div
-          className={`w-[700px]     mid-popup   duration-300 ease-in-out flex flex-col py-6 px-6  gap-6   rounded-lg rounded-lg bg-fade-grey         ${
+          className={`w-[700px]     mid-popup   duration-300 ease-in-out flex flex-col py-6 px-6  gap-6   rounded-lg rounded-lg bg-fade-grey     max-md:p-3  max-md:gap-2    ${
             newFeedbackPopupVisible ? "" : "mid-popup-hidden"
           }`}
           ref={newFeedbackPopupRef}
         >
-          <h1 className="text-2xl sf-bold text-white text-start">
+          <h1 className="text-2xl sf-bold text-white text-start  max-md:text-xl">
             Give feedback
           </h1>
           <div className="flex flex-col gap-4 w-full">
-            <div className="flex gap-2 w-full ">
+            <div className="flex gap-2 w-full  max-2xs:flex-col">
               <div className="relative">
                 <button
-                  className="flex w-[120px] focus:ring-[1px]    ring-fade-blue   rounded-full h-11 overflow-hidden duration-150 border border-grey"
+                  className="flex w-[120px] focus:ring-[1px]    ring-fade-blue   rounded-full h-11 overflow-hidden duration-150 border border-grey  max-md:h-9"
                   onClick={toggleTypeOpen}
                 >
                   <div className="flex items-center gap-1 w-full  flex  items-center justify-center">
@@ -210,24 +210,21 @@ const NewFeedbackPopup = ({
                 value={title}
                 setValue={setTitle}
                 setError={setError}
-                classname_overide="rounded-full"
+                classname_overide="rounded-full max-md:h-9  max-sm:!h-9"
                 error={error}
                 errorContent="A short title is required"
                 placeholder="Short title for your feedback"
               />
             </div>
             <TextEditor
+              classname_overide="max-md:min-h-[100px]"
               onContentChange={(json) => {
                 setDetails(json);
                 setError("");
               }}
             />
             <div className="flex items-center gap-2">
-              <PriorityRating
-                value={priority}
-                setValue={setPriority}
-                size={20}
-              />
+              <PriorityRating value={priority} setValue={setPriority} />
             </div>
           </div>
           {error && (
@@ -238,7 +235,7 @@ const NewFeedbackPopup = ({
 
           <div className="flex gap-4 justify-between">
             <button
-              className="flex items-center justify-center  gap-2  h-[40px]  px-2 rounded-full  bg-grey-blue        duration-150 hover:ring hover:ring   ring-white         text-center w-32  text-white text-sm "
+              className="flex items-center justify-center  gap-2  h-[40px]  px-2 rounded-full  bg-grey-blue        duration-150 hover:ring hover:ring   ring-white         text-center w-32  text-white text-sm  max-md:h-[35px]"
               onClick={toggleNewFeedbackPopup}
             >
               Cancel
@@ -253,7 +250,7 @@ const NewFeedbackPopup = ({
                 title.trim() === "" ||
                 !hasValidContent(details?.content || [])
               }
-              classname_overide=" max-h-[40px] hover:ring  rounded-full  !w-32"
+              classname_overide=" max-h-[40px] hover:ring  rounded-full  !w-32 max-md:!h-[35px]"
             />
           </div>
         </div>

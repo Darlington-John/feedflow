@@ -1,8 +1,8 @@
 import { useAuthContext } from "~/app/context/auth-context";
-import { User } from "~/lib/types/user-type";
+
 import Link from "next/link";
 import { CiLogout } from "react-icons/ci";
-import { FaGear } from "react-icons/fa6";
+import { user_type } from "~/lib/types/user";
 interface menuProps {
   isProfileMenuVisible: boolean;
   profileMenu: boolean;
@@ -17,16 +17,16 @@ const ProfileMenu = ({
   profileMenuRef,
   toggleLogoutPrompt,
 }: menuProps) => {
-  const { user } = useAuthContext() as { user: User };
+  const { user } = useAuthContext() as { user: user_type };
   return (
     profileMenu && (
       <div
-        className={`w-[200px]        py-4 px-2  flex flex-col gap-1       duration-300 absolute top-12 right-0  bg-fade-grey  shadow-lg  rounded-lg border border-grey   ${
+        className={`w-[200px]        py-2 px-2  flex flex-col gap-1       duration-300 absolute top-12 right-0  bg-fade-grey  shadow-lg  rounded-lg border border-grey   ${
           isProfileMenuVisible ? "opacity-100" : "opacity-0"
         }`}
         ref={profileMenuRef}
       >
-        <div className="flex flex-col w-full gap-1">
+        <div className="flex flex-col w-full ">
           <Link
             href={`/users/${user._id}?query=posts`}
             className="flex  items-center gap-3 py-2 hover:bg-grey px-2 rounded-sm"
@@ -37,27 +37,20 @@ const ProfileMenu = ({
               className="w-8  h-8 object-cover rounded-full cursor-pointer "
               alt=""
             />
-            <h1 className="text-[15px]   leading-[24px] line-clamp-1   sf-light text-white">
+            <h1 className="text-sm   leading-[24px] line-clamp-1   sf-light text-white">
               View Profile
             </h1>
           </Link>
         </div>
-        <div className="flex flex-col w-full gap-1  hover:bg-grey rounded-sm">
-          <div className="flex  items-center gap-3 py-2 px-3">
-            <FaGear className="w-5  object-cover cursor-pointer " />
-            <h1 className="text-[15px]   leading-[24px] line-clamp-1  sf-light  text-white">
-              Settings
-            </h1>
-          </div>
-        </div>
+        <div className="flex flex-col w-full gap-1  hover:bg-grey rounded-sm"></div>
 
         <div className="flex flex-col w-full gap-1  hover:bg-grey rounded-sm">
           <button
             className="flex  items-center gap-3 py-2 px-3"
             onClick={toggleLogoutPrompt}
           >
-            <CiLogout className="w-5  object-cover   cursor-pointer " />
-            <h1 className="text-[15px]   leading-[24px] line-clamp-1   sf-light  text-white">
+            <CiLogout className="  cursor-pointer text-silver-blue text-2xl " />
+            <h1 className="text-sm   leading-[24px] line-clamp-1   sf-light  text-white">
               Log out
             </h1>
           </button>

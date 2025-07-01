@@ -24,7 +24,7 @@ const Feedbacks = () => {
     togglePopup: toggleFeedbackPopup,
   } = usePopup();
 
-  const { user } = useAuthContext();
+  const { user, loading: fetchingUser } = useAuthContext();
   const { team_id } = useParams();
 
   const [loading, setLoading] = useState(false);
@@ -38,6 +38,9 @@ const Feedbacks = () => {
 
   const [feedbacksCount, setFeedbacksCount] = useState(0);
   useEffect(() => {
+    if (fetchingUser) {
+      return;
+    }
     const fetchFeedbacks = async () => {
       setLoading(true);
       await apiRequest({
@@ -59,7 +62,7 @@ const Feedbacks = () => {
     };
 
     fetchFeedbacks();
-  }, [dispatch, user?._id, team_id]);
+  }, [dispatch, user?._id, team_id, user, fetchingUser]);
   const [skip, setSkip] = useState(feedbacks?.length);
   const [showMore, setShowMore] = useState(
     (feedbacksCount as number) > feedbacks?.length
@@ -145,26 +148,26 @@ const Feedbacks = () => {
   return (
     <>
       <Loader
-        fetching={loading}
+        fetching={loading || fetchingUser}
         errorFetching={fetchingError}
         error={fetchError}
       >
         <div className="flex items-start  w-full flex-col gap-2">
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full  max-sm:py-2">
             {feedbacksCount > 0 && (
-              <h1 className="text-xl sf-light text-silver-blue ">
+              <h1 className="text-xl sf-light text-silver-blue  max-sm:text-lg">
                 Total Feedbacks: {feedbacksCount}
               </h1>
             )}
 
             <button
-              className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150"
+              className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150 text-sm  max-sm:py-1 self-end"
               onClick={() => {
                 toggleFeedbackPopup();
               }}
             >
-              <FaPlus size={20} />
-              <h1 className="text-sm  ">Give feedback</h1>
+              <FaPlus className="text-xl max-sm:text-sm " />
+              <h1 className="text-sm  ">New</h1>
             </button>
           </div>
 
@@ -215,7 +218,7 @@ const Feedbacks = () => {
               </p>
             </div>
           )}
-          {showMore && (
+          {showMore && areAllFiltersDefault() && (
             <AsyncButton
               action="+View  more posts"
               loading={moreFeedbacksLoading}

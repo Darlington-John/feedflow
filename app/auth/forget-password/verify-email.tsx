@@ -101,6 +101,7 @@ const VerifyEmail = ({
         action="Verify"
         loading={isVerifying}
         success={success}
+        classname_overide="max-sm:!h-[35px]  "
         disabled={!isVerificationCodeComplete()}
         onClick={() => submit("verify-email")}
       />

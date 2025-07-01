@@ -39,7 +39,7 @@ const ForgotPassword = ({
           serverError={["No account found with this email address."]}
         />
       </div>
-      {error !== "No account found with this email address." && (
+      {error && error !== "No account found with this email address." && (
         <div className="flex gap-2 items-center ">
           <div className="p-1  bg-pink rounded-full "></div>
           <h1 className="text-sm text-red">{error}</h1>
@@ -51,6 +51,7 @@ const ForgotPassword = ({
         loading={isChecking}
         success={success}
         disabled={!email}
+        classname_overide="max-sm:!h-[35px]"
         onClick={() => submit("forgot-password")}
       />
     </div>

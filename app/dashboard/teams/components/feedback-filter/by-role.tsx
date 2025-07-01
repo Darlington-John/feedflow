@@ -56,21 +56,21 @@ const RolesFilter = ({
           } `}
           ref={filterPopRef}
         >
-          {roles.map((Role) => (
+          {roles.map((role) => (
             <button
-              key={Role.type}
+              key={role.type}
               onClick={() => {
-                handleRoleClick(Role.type);
+                handleRoleClick(role.type);
                 toggleFilterPop();
               }}
               className={`cursor-pointer px-3 py-2 text-sm  max-xs:text-[11px]  transition-colors duration-200 flex gap-2 items-center ${
-                selectedRole === Role.type
+                selectedRole === role.type
                   ? "bg-grey text-white"
                   : "  text-white  hover:bg-navy"
               }`}
             >
-              <span>{Role.icon}</span>
-              <span>{Role.type}</span>
+              <span>{role.icon}</span>
+              <span>{role.type}</span>
             </button>
           ))}
         </div>

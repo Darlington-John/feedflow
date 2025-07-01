@@ -56,7 +56,7 @@ const TeamMenu = () => {
   } = usePopup();
   return (
     <>
-      <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static">
+      <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static  max-sm:flex-col">
         {hasError ? (
           <div className="flex h-[200px] items-center justify-center ">
             <div className="flex flex-col gap-1">

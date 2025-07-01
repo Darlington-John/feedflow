@@ -8,12 +8,7 @@ interface PriorityRatingProps {
   setValue: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const PriorityRating = ({
-  onChange,
-  size = 24,
-  value,
-  setValue,
-}: PriorityRatingProps) => {
+const PriorityRating = ({ onChange, value, setValue }: PriorityRatingProps) => {
   const [hover, setHover] = useState<number | null>(null);
 
   const handleClick = (index: number) => {
@@ -22,8 +17,8 @@ const PriorityRating = ({
   };
 
   return (
-    <div className="flex gap-1 ring-fade-blue   rounded-full h-11 overflow-hidden duration-150 border border-grey flex items-center px-3">
-      <span className="text-base">Priority:</span>
+    <div className="flex gap-1 ring-fade-blue   rounded-full h-11 overflow-hidden duration-150 border border-grey flex items-center px-3 max-md:h-9">
+      <span className="text-base max-md:text-sm">Priority:</span>
       {[1, 2, 3, 4, 5].map((star) => {
         const isFilled = hover ? star <= hover : star <= value;
 
@@ -37,9 +32,8 @@ const PriorityRating = ({
             className="focus:outline-none "
           >
             <FaStar
-              size={size}
               color={isFilled ? "#0AA0EA" : "#d1d5db"} // gray-300
-              className="transition-colors duration-200"
+              className="transition-colors duration-200  text-xl max-md:text-base"
             />
           </button>
         );

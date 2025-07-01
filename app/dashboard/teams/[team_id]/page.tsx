@@ -2,6 +2,7 @@
 import { useSearchParams } from "next/navigation";
 import Invite from "./invite";
 import Feedbacks from "./feedbacks";
+import Members from "./members";
 
 const Team = () => {
   const searchParams = useSearchParams();
@@ -10,7 +11,7 @@ const Team = () => {
   return (
     <>
       {!query || (query === "feedbacks" && <Feedbacks />)}
-      {query === "members" && "members"}
+      {query === "members" && <Members />}
       {query === "invite" && <Invite />}
     </>
   );

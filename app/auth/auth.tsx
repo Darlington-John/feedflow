@@ -167,9 +167,9 @@ const AuthPrompt = () => {
 
   return (
     authPopup && (
-      <div className="fixed bottom-[0px]  h-full w-full  z-110 left-0 flex  justify-center  items-center        backdrop-brightness-50  px-8     xs:px-0">
+      <div className="fixed bottom-[0px]  h-full w-full  z-110 left-0 flex  justify-center  items-center        backdrop-blur-xs backdrop-brightness-40  px-8      max-sm:px-4">
         <div
-          className={`w-[500px]     mid-popup   duration-300 ease-in-out flex flex-col py-6 px-6  gap-4   rounded-lg bg-fade-grey  items-center      ${
+          className={`w-[500px]     mid-popup   duration-300 ease-in-out flex flex-col py-6 px-6  gap-4   rounded-lg bg-fade-grey  items-center    max-2xs:w-full  max-sm:px-4 max-sm:py-4  max-sm:gap-2 ${
             authPopupVisible ? "" : "mid-popup-hidden"
           }`}
           ref={authPopupRef}
@@ -193,15 +193,15 @@ const AuthPrompt = () => {
             )}
 
             <button
-              className="p-2  rounded-full bg-grey self-end hover:bg-grey-blue self-end"
+              className="p-2  rounded-full bg-grey self-end hover:bg-grey-blue self-end "
               onClick={toggleAuthPopup}
             >
-              <FaXmark size={16} className="text-white" />
+              <FaXmark className="text-white text-xl max-sm:text-sm" />
             </button>
           </div>
-          <div className="flex items-center   flex-col gap-3  w-[350px]">
+          <div className="flex items-center   flex-col gap-3  w-[350px]  max-2xs:w-full max-sm:gap-1">
             <div className="flex flex-col gap-2 text-center">
-              <h1 className="text-2xl text-white sf-black">
+              <h1 className="text-2xl text-white sf-black max-sm:text-xl">
                 {currentAction === "log-in" && "Log In"}
                 {currentAction === "sign-up" && "Sign Up"}
                 {["verify-email", "forgot-password-verify-email"].includes(

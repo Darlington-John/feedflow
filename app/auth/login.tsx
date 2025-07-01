@@ -46,7 +46,7 @@ const Login = ({
     "Incorrect password. Please try again.",
   ];
   return (
-    <div className="flex items-center w-full flex-col gap-3 ">
+    <div className="flex items-center w-full flex-col gap-3  max-sm:gap-2 ">
       <ClassicInput
         value={email}
         setValue={setEmail}
@@ -106,6 +106,7 @@ const Login = ({
       <AsyncButton
         action="Log In"
         loading={loading}
+        classname_overide="max-sm:!h-[35px]  "
         success={success}
         disabled={!email || !password}
         onClick={() => submit("log-in")}
