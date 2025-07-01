@@ -53,7 +53,7 @@ const MembersFilter = ({
         </div>
         <div className="flex items-center gap-2  shrink-0 max-xs:self-start">
           <span className="text-xs  text-silver-blue  sf-light ">
-            {filteredMembers?.length} feedbacks
+            {filteredMembers?.length} members
           </span>
         </div>
       </div>

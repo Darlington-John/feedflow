@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
+import Feedback from "~/lib/models/feedback";
 import Team from "~/lib/models/teams";
 import connectMongo from "~/lib/mongodb";
 
@@ -62,23 +63,31 @@ export async function GET(
     const adminIds = team.admins.map((id) => id.toString());
     const superAdminIds = team.super_admins.map((id) => id.toString());
 
-    const membersWithRoles = team.members.map((member) => {
-      const memberIdStr = member._id.toString();
+    const membersWithRoles = await Promise.all(
+      team.members.map(async (member) => {
+        const memberIdStr = member._id.toString();
 
-      let role = "member";
-      if (superAdminIds.includes(memberIdStr)) {
-        role = "super admin";
-      } else if (adminIds.includes(memberIdStr)) {
-        role = "admin";
-      }
+        const feedbacks = await Feedback.countDocuments({
+          team: team_id,
+          by: memberIdStr,
+        });
 
-      return {
-        ...member,
-        role,
-        adminIds,
-        superAdminIds,
-      };
-    });
+        let role = "member";
+        if (superAdminIds.includes(memberIdStr)) {
+          role = "super admin";
+        } else if (adminIds.includes(memberIdStr)) {
+          role = "admin";
+        }
+
+        return {
+          ...member, // Convert Mongoose document to plain object
+          role,
+          adminIds,
+          superAdminIds,
+          feedbacks_count: feedbacks,
+        };
+      })
+    );
 
     return NextResponse.json(
       {

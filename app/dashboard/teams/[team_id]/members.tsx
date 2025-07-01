@@ -37,7 +37,7 @@ const Members = () => {
         onSuccess: (res) => {
           dispatch(setMembers(res.result));
           setFetchingError(false);
-          setMembersCount(res.Members_count);
+          setMembersCount(res.members_count);
         },
         onError: (error) => {
           setFetchError(error);
@@ -163,10 +163,6 @@ const Members = () => {
                   <h1 className="text-lg   text-center text-light-blue">
                     No Members yet
                   </h1>
-                  <p className="text-[#4696dd] text-sm  w-72  text-center">
-                    No members has made a Member yet... Once they do, their
-                    Members will show up here
-                  </p>
                 </div>
               )
             ) : filteredMembers && filteredMembers?.length > 0 ? (

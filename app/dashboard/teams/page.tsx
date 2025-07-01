@@ -30,7 +30,7 @@ const Teams = () => {
           <Loader fetching={loading}></Loader>
         ) : user ? (
           <Loader fetching={isFetching} errorFetching={hasError} error={error}>
-            <div className="flex flex-c0l  max-w-[1500px] items-center  justify-center  flex-col mx-auto max-md:w-full">
+            <div className="flex   w-[1100px] items-center  justify-center  flex-col mx-auto max-2xl:w-full">
               <div className="flex items-center w-full justify-between">
                 <h1 className="text-2xl sf-light  max-sm:text-xl">Teams</h1>
                 <button
@@ -41,11 +41,11 @@ const Teams = () => {
                   <span>Create team</span>
                 </button>
               </div>
-              <div className="flex items-start gap-4 flex-wrap py-3 max-md:grid max-md:grid-cols-2 max-md:w-full">
+              <div className="flex items-start justify-start gap-4 flex-wrap py-3 max-md:grid max-md:grid-cols-2 w-full">
                 {fetchedData?.map((team) => (
                   <Link
                     href={`/dashboard/teams/${team._id}?query=feedbacks`}
-                    className="flex flex-col gap-2 items-center p-2 border border-grey  rounded-md  w-[350px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue  max-2xl:w-[200px]  max-md:w-full"
+                    className="flex flex-col gap-2 items-center p-2 border border-grey  rounded-md  w-[250px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue  max-2xl:w-[200px]  max-md:w-full"
                     key={team.updatedAt}
                   >
                     <button className="w-6  h-6  absolute right-5 top-5  text-grey  flex items-center justify-center rounded-full hover:ring ring-grey-blue  duration-15o ">

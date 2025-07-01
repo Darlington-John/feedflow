@@ -20,14 +20,11 @@ const feedbacksSlice = createSlice({
       state.feedbacks.unshift(newFeedback);
     },
 
-    deleteFeedback: (
-      state,
-      action: PayloadAction<{ feedbackId: string; userId: string }>
-    ) => {
-      const { feedbackId, userId } = action.payload;
+    deleteFeedback: (state, action: PayloadAction<{ feedbackId: string }>) => {
+      const { feedbackId } = action.payload;
 
       state.feedbacks = state.feedbacks.filter((feedback) => {
-        return feedback._id !== feedbackId || feedback.by._id !== userId;
+        return feedback._id !== feedbackId;
       });
     },
 

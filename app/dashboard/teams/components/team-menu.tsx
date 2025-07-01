@@ -56,7 +56,9 @@ const TeamMenu = () => {
   } = usePopup();
   return (
     <>
-      <div className="shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static  max-sm:flex-col">
+      <div
+        className={`shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static  max-sm:flex-col overflow-hidden  `}
+      >
         {hasError ? (
           <div className="flex h-[200px] items-center justify-center ">
             <div className="flex flex-col gap-1">
@@ -128,43 +130,54 @@ const TeamMenu = () => {
                 </div>
               </div>
             </div>
-            {team?.admins.includes(user?._id as string) ||
-              (team?.super_admins.includes(user?._id as string) && (
-                <div className="flex flex-col gap-2 w-full max-2xl:flex-1 ">
-                  <button
-                    className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
-                    onClick={toggleNamePopup}
-                  >
-                    <span>Edit Team Name</span>
-                    <IoIosArrowForward />
-                  </button>
-                  <button
-                    className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
-                    onClick={toggleIconPopup}
-                  >
-                    <span>Change Icon</span>
-                    <IoIosArrowForward />
-                  </button>
-                  <button
-                    className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
-                    onClick={toggleChangeDescPopup}
-                  >
-                    <span>
-                      {team?.description
-                        ? "Edit  Description"
-                        : "Add Description"}
-                    </span>
-                    <IoIosArrowForward />
-                  </button>
-                  <button
-                    className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
-                    onClick={toggleAddMembersPopup}
-                  >
-                    <span>Invite members</span>
-                    <IoIosArrowForward />
-                  </button>
-                </div>
-              ))}
+            {team?.members?.includes(user?._id as string) && (
+              <div className="flex flex-col gap-2 w-full max-2xl:flex-1 ">
+                {team?.admins?.includes(user?._id as string) ||
+                  (team?.super_admins?.includes(user?._id as string) && (
+                    <div className="flex flex-col gap-2 w-full max-2xl:flex-1 ">
+                      <button
+                        className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
+                        onClick={toggleNamePopup}
+                      >
+                        <span>Edit Team Name</span>
+                        <IoIosArrowForward />
+                      </button>
+                      <button
+                        className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
+                        onClick={toggleIconPopup}
+                      >
+                        <span>Change Icon</span>
+                        <IoIosArrowForward />
+                      </button>
+                      <button
+                        className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
+                        onClick={toggleChangeDescPopup}
+                      >
+                        <span>
+                          {team?.description
+                            ? "Edit  Description"
+                            : "Add Description"}
+                        </span>
+                        <IoIosArrowForward />
+                      </button>
+                      <button
+                        className="w-full bg-navy  rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm hover:bg-grey duration-150 "
+                        onClick={toggleAddMembersPopup}
+                      >
+                        <span>Invite members</span>
+                        <IoIosArrowForward />
+                      </button>
+                    </div>
+                  ))}
+                <button
+                  className="w-full rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm  bg-[#09192678] duration-150 hover:bg-grey   "
+                  onClick={toggleIconPopup}
+                >
+                  <span>Leave team</span>
+                  <IoIosArrowForward />
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

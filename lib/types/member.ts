@@ -7,4 +7,5 @@ export interface member_type {
   role: string;
   superAdminIds: string[];
   adminIds: string[];
+  feedbacks_count: number;
 }

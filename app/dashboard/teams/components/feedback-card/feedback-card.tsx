@@ -14,6 +14,9 @@ import { useAuthContext } from "~/app/context/auth-context";
 import { apiRequest } from "~/lib/utils/api-request";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/lib/redux/store";
+import { deleteFeedback } from "~/lib/redux/slices/feedbacks";
 
 interface props {
   feed: feedback_type;
@@ -63,9 +66,10 @@ const FeedbackCard = ({ feed }: props) => {
     togglePopup: toggleDeleteOpen,
     setDisableToggle: setDisableDelete,
   } = usePopup();
+  const dispatch = useDispatch<AppDispatch>();
   const [deleting, setDeleting] = useState(false);
   const [sucessful, setSucessful] = useState(false);
-  const deleteFeedback = async () => {
+  const handleDeleteFeedback = async () => {
     if (deleting) {
       return;
     }
@@ -87,7 +91,7 @@ const FeedbackCard = ({ feed }: props) => {
         setTimeout(() => {
           toggleDeleteOpen();
           setSucessful(false);
-          window.dispatchEvent(new CustomEvent("refreshFeedbacks"));
+          dispatch(deleteFeedback({ feedbackId: feed._id }));
         }, 3000);
       },
       onError: (error) => {
@@ -136,30 +140,34 @@ const FeedbackCard = ({ feed }: props) => {
             </span>
           </div>
         </div>
-        <div className="relative">
-          <button
-            className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
-            onClick={toggleDeleteOpen}
-          >
-            <FaEllipsisH size={12} />
-          </button>
-          {deleteOpen && (
-            <div
-              className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
-                deleteVisible ? "" : "mid-popup-hidden"
-              }`}
-              ref={deleteRef}
+        {(feed.adminIds?.includes(user?._id as string) ||
+          feed.superAdminIds?.includes(user?._id as string) ||
+          feed.by._id === user?._id) && (
+          <div className="relative">
+            <button
+              className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
+              onClick={toggleDeleteOpen}
             >
-              <AsyncButton
-                action="Delete feedback"
-                classname_overide="!h-8 !rounded-sm !bg-grey"
-                loading={deleting}
-                success={sucessful}
-                onClick={deleteFeedback}
-              />
-            </div>
-          )}
-        </div>
+              <FaEllipsisH size={12} />
+            </button>
+            {deleteOpen && (
+              <div
+                className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
+                  deleteVisible ? "" : "mid-popup-hidden"
+                }`}
+                ref={deleteRef}
+              >
+                <AsyncButton
+                  action="Delete feedback"
+                  classname_overide="!h-8 !rounded-sm !bg-grey"
+                  loading={deleting}
+                  success={sucessful}
+                  onClick={handleDeleteFeedback}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div
         className={`flex items-center   px-1   py-1 text-left  rounded-full   ${bgOnType}`}

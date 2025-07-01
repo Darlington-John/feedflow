@@ -105,9 +105,9 @@ const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
   const [dislikes, setDislikes] = useState(feed.dislikes.length || 0);
 
   const [userReaction, setUserReaction] = useState<"like" | "dislike" | "">(
-    feed.likes.includes(user?._id as string)
+    feed?.likes?.includes(user?._id as string)
       ? "like"
-      : feed.dislikes.includes(user?._id as string)
+      : feed?.dislikes?.includes(user?._id as string)
       ? "dislike"
       : ""
   );
