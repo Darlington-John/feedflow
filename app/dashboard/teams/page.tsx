@@ -1,5 +1,5 @@
 "use client";
-import { FaEllipsisVertical, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { usePageFetch } from "~/lib/utils/fetch-page-data";
 import { team_type } from "~/lib/types/team";
 import Loader from "../components/loader";
@@ -48,9 +48,6 @@ const Teams = () => {
                     className="flex flex-col gap-2 items-center p-2 border border-grey  rounded-md  w-[250px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue  max-2xl:w-[200px]  max-md:w-full"
                     key={team.updatedAt}
                   >
-                    <button className="w-6  h-6  absolute right-5 top-5  text-grey  flex items-center justify-center rounded-full hover:ring ring-grey-blue  duration-15o ">
-                      <FaEllipsisVertical className="text-grey-blue  text-sm " />
-                    </button>
                     {team.icon ? (
                       //  eslint-disable-next-line
                       <img

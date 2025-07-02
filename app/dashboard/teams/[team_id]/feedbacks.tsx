@@ -153,7 +153,7 @@ const Feedbacks = () => {
         error={fetchError}
       >
         <div className="flex items-start  w-full flex-col gap-2">
-          <div className="flex items-center justify-between w-full  max-sm:py-2">
+          <div className="flex items-center justify-between w-full  py-2">
             {feedbacksCount > 0 && (
               <h1 className="text-xl sf-light text-silver-blue  max-sm:text-lg">
                 Total Feedbacks: {feedbacksCount}

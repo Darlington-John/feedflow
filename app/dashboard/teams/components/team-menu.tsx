@@ -13,6 +13,7 @@ import { useAuthContext } from "~/app/context/auth-context";
 import EditDesc from "./edit-team/edit-desc";
 import AddMembersPopup from "./add-members-popup";
 import LeaveTeamPopup from "./leave-team-popup";
+import DeleteTeamPopup from "./delete-team-popup";
 
 const TeamMenu = () => {
   const { team_id } = useParams();
@@ -61,6 +62,13 @@ const TeamMenu = () => {
     ref: leaveTeamRef,
     togglePopup: toggleLeaveTeamPopup,
     setDisableToggle: setDisableLeaveTeam,
+  } = usePopup();
+  const {
+    isVisible: deleteTeamVisible,
+    isActive: deleteTeam,
+    ref: deleteTeamRef,
+    togglePopup: toggleDeleteTeamPopup,
+    setDisableToggle: setDisableDeleteTeam,
   } = usePopup();
   return (
     <>
@@ -184,6 +192,15 @@ const TeamMenu = () => {
                   <span>Leave team</span>
                   <IoIosArrowForward />
                 </button>
+                {team.super_admins.includes(user?._id as string) && (
+                  <button
+                    className="w-full rounded-md  p-2 h-[45px]  flex items-center justify-between text-silver-blue text-sm  bg-[#09192678] duration-150 hover:bg-grey   "
+                    onClick={toggleDeleteTeamPopup}
+                  >
+                    <span>Delete team</span>
+                    <IoIosArrowForward />
+                  </button>
+                )}
               </div>
             )}
           </>
@@ -224,6 +241,14 @@ const TeamMenu = () => {
         ref={leaveTeamRef}
         togglePopup={toggleLeaveTeamPopup}
         setDisable={setDisableLeaveTeam}
+      />
+      <DeleteTeamPopup
+        isActive={deleteTeam}
+        team={team}
+        isVisible={deleteTeamVisible}
+        ref={deleteTeamRef}
+        togglePopup={toggleDeleteTeamPopup}
+        setDisable={setDisableDeleteTeam}
       />
     </>
   );
