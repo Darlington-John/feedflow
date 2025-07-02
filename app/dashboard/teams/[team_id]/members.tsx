@@ -1,4 +1,3 @@
-import { FaPlus } from "react-icons/fa6";
 import { useParams } from "next/navigation";
 import logo from "~/public/images/logo.svg";
 import Image from "next/image";
@@ -130,19 +129,9 @@ const Members = () => {
                 Total Members: {membersCount}
               </h1>
             )}
-
-            <button
-              className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150 text-sm  max-sm:py-1 self-end"
-              //   onClick={() => {
-              //     toggleMemberPopup();
-              //   }}
-            >
-              <FaPlus className="text-xl max-sm:text-sm " />
-              <h1 className="text-sm  ">Invite</h1>
-            </button>
           </div>
 
-          <div className="flex w-full items-center justify-between py-2">
+          <div className="flex w-full items-center justify-between py-2 ">
             <MembersFilter
               filteredMembers={filteredMembers}
               areAllFiltersDefault={areAllFiltersDefault}
@@ -151,7 +140,7 @@ const Members = () => {
               handleRoleClick={handleRoleClick}
             />
           </div>
-          <div className="flex flex-wrap gap-3 w-full">
+          <div className="flex flex-wrap gap-3 w-full  max-2xs:grid grid-cols-2">
             {areAllFiltersDefault() ? (
               members && members?.length > 0 ? (
                 members?.map((member) => (

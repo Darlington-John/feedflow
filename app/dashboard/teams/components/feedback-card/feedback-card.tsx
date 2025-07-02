@@ -46,7 +46,7 @@ const FeedbackCard = ({ feed }: props) => {
       ? "bg-[#DAA520]"
       : "bg-[#007BA7]";
   const roleColors: Record<string, string> = {
-    "super admin": "bg-indigo-900  text-white",
+    "super admin": "bg-[#783a71]  text-white",
     admin: "bg-[#2563EB]  text-white",
     member: "bg-[#14B8A6]  text-white",
   };
@@ -140,34 +140,35 @@ const FeedbackCard = ({ feed }: props) => {
             </span>
           </div>
         </div>
-        {(feed.adminIds?.includes(user?._id as string) ||
-          feed.superAdminIds?.includes(user?._id as string) ||
-          feed.by._id === user?._id) && (
-          <div className="relative">
-            <button
-              className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
-              onClick={toggleDeleteOpen}
-            >
-              <FaEllipsisH size={12} />
-            </button>
-            {deleteOpen && (
-              <div
-                className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
-                  deleteVisible ? "" : "mid-popup-hidden"
-                }`}
-                ref={deleteRef}
+        {!feed.superAdminIds?.includes(feed.by._id) &&
+          (feed.adminIds?.includes(user?._id as string) ||
+            feed.superAdminIds?.includes(user?._id as string) ||
+            feed.by._id === user?._id) && (
+            <div className="relative">
+              <button
+                className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
+                onClick={toggleDeleteOpen}
               >
-                <AsyncButton
-                  action="Delete feedback"
-                  classname_overide="!h-8 !rounded-sm !bg-grey"
-                  loading={deleting}
-                  success={sucessful}
-                  onClick={handleDeleteFeedback}
-                />
-              </div>
-            )}
-          </div>
-        )}
+                <FaEllipsisH size={12} />
+              </button>
+              {deleteOpen && (
+                <div
+                  className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
+                    deleteVisible ? "" : "mid-popup-hidden"
+                  }`}
+                  ref={deleteRef}
+                >
+                  <AsyncButton
+                    action="Delete feedback"
+                    classname_overide="!h-8 !rounded-sm !bg-grey"
+                    loading={deleting}
+                    success={sucessful}
+                    onClick={handleDeleteFeedback}
+                  />
+                </div>
+              )}
+            </div>
+          )}
       </div>
       <div
         className={`flex items-center   px-1   py-1 text-left  rounded-full   ${bgOnType}`}

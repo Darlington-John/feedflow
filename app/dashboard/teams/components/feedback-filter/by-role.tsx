@@ -1,6 +1,5 @@
-import { FaLightbulb } from "react-icons/fa6";
 import { IoIosList } from "react-icons/io";
-import { MdBugReport, MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import { TiStarburst } from "react-icons/ti";
 interface filterRolesProps {
   toggleFilterPop: () => void;
@@ -21,19 +20,20 @@ const RolesFilter = ({
   const roles = [
     {
       type: "All",
+
       icon: <IoIosList className="text-white" size={18} />,
     },
     {
       type: "super admin",
-      icon: <MdBugReport className="text-[#BE185D]" size={18} />,
+      icon: <TiStarburst className="text-[#783a71]" size={18} />,
     },
     {
       type: "admin",
-      icon: <FaLightbulb className="text-[#FFD700]" size={18} />,
+      icon: <TiStarburst className="text-[#2563EB]" size={18} />,
     },
     {
       type: "member",
-      icon: <TiStarburst className="text-powder-blue" size={18} />,
+      icon: <TiStarburst className="text-[#14B8A6]" size={18} />,
     },
   ];
 

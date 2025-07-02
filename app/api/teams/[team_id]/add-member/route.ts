@@ -68,7 +68,7 @@ export async function POST(
         type: "team-invite",
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "3d" }
+      { expiresIn: "1d" }
     );
     const inviteLink = `http://localhost:3000/dashboard/teams/${team_id}?query=invite&token=${inviteToken}`;
     await transporter.sendMail({

@@ -39,12 +39,17 @@ const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
       onSuccess: (response) => {
         setLikes(response.likes);
         setDislikes(response.dislikes);
-        toast.success(action === "like" ? "Post Liked" : "Post Disliked", {
-          icon: <FaCheck color="white" />,
-        });
+        toast.success(
+          action === "like" ? "Feedback Liked" : "Feedback Disliked",
+          {
+            icon: <FaCheck color="white" />,
+          }
+        );
       },
       onError: () => {
-        toast.error(action === "like" ? "Post not liked" : "Post not disliked");
+        toast.error(
+          action === "like" ? "Feedback not liked" : "Feedback not disliked"
+        );
       },
     });
   };

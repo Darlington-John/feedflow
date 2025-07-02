@@ -11,7 +11,7 @@ interface memberProps {
 }
 const MemberCard = ({ member }: memberProps) => {
   const roleColors: Record<string, string> = {
-    "super admin": "bg-indigo-900  text-white",
+    "super admin": "bg-[#783a71]  text-white",
     admin: "bg-[#2563EB]  text-white",
     member: "bg-[#14B8A6]  text-white",
   };
@@ -25,7 +25,7 @@ const MemberCard = ({ member }: memberProps) => {
 
   const { user } = useAuthContext();
   return (
-    <div className="flex flex-col gap-2 items-center  border border-grey  rounded-sm overflow-hidden  w-[150px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue  max-2xl:w-[200px]  max-md:w-full  relative">
+    <div className="flex flex-col gap-2 items-center  border border-grey  rounded-sm overflow-hidden  w-[150px] py-5  relative  hover:shadow-2xl duration-150 hover:border-grey-blue  max-2xl:w-[200px]  relative  max-2xs:w-full">
       {!member.superAdminIds?.includes(member._id) &&
         member._id !== user?._id &&
         (member.adminIds?.includes(user?._id as string) ||

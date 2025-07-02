@@ -40,7 +40,7 @@ export async function GET(
     }
     const feedbacks = await Feedback.find({ team: team_id })
       .sort({ createdAt: -1 })
-      .limit(1)
+      .limit(10)
       .populate({
         path: "by",
         select: "username profile",

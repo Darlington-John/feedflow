@@ -36,7 +36,7 @@ const MembersFilter = ({
     },
   ];
   const handleClearFilters = () => {
-    setSelectedRole("");
+    setSelectedRole("All");
   };
   return (
     <div className="flex w-full flex-col gap-0">
