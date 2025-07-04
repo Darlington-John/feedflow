@@ -2,8 +2,8 @@ import { getServerSession } from "next-auth";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import connectMongo from "~/lib/mongodb";
-import { authOptions } from "../[...nextauth]/route";
 import User from "~/lib/models/users";
+import authOptions from "~/lib/configs/auth/authOptions";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 export async function GET() {
