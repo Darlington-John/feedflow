@@ -13,7 +13,7 @@ import { store } from "~/lib/redux/store";
 import { NextAuthProvider } from "./next-auth-provider";
 import Header from "./dashboard/components/header/header";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { Router } from "next/router";
 
 const SFReg = localFont({
@@ -71,9 +71,11 @@ export default function RootLayout({
               <UtilsProvider>
                 <ToastContainer position="bottom-right" closeButton={false} />
                 <AuthPrompt />
-                <Header />
+                <Suspense>
+                  <Header />
 
-                {children}
+                  {children}
+                </Suspense>
               </UtilsProvider>
             </AuthProvider>
           </Provider>

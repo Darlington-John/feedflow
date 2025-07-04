@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "next/navigation";
 import Invite from "./invite";
 import Feedbacks from "./feedbacks";
 import Members from "./members";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { socket } from "~/lib/utils/socket";
 
 const Team = () => {
@@ -25,11 +25,13 @@ const Team = () => {
   }, [team_id]);
 
   return (
-    <div className="relative  z-20">
-      {!query || (query === "feedbacks" && <Feedbacks />)}
-      {query === "members" && <Members />}
-      {query === "invite" && <Invite />}
-    </div>
+    <Suspense>
+      <div className="relative  z-20">
+        {!query || (query === "feedbacks" && <Feedbacks />)}
+        {query === "members" && <Members />}
+        {query === "invite" && <Invite />}
+      </div>
+    </Suspense>
   );
 };
 

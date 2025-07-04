@@ -1,6 +1,6 @@
 "use client";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 import Link from "next/link";
 import TeamMenu from "../components/team-menu";
@@ -31,29 +31,31 @@ export default function RootLayout({
   ];
 
   return (
-    <div className="w-full  min-h-[100vh]  p-5 bg-navy  main justify-center   flex ">
-      <div className="w-[1100px]  flex  gap-8  divide-y divide-grey bg-navy  items-start  max-2xl:flex-col ">
-        <div className="flex flex-col w-full  min-h-screeen">
-          {query !== "invite" && (
-            <div className="flex  items-center gap-6">
-              {navigation.map((data, index) => (
-                <Link
-                  key={index}
-                  href={`/dashboard/teams/${team_id}?query=${data.query}`}
-                  className={`h-[40px]  px-3 text-silver-blue hover:underline text-sm flex items-center justify-center  rounded-full ${
-                    query === data.query && "bg-grey"
-                  }`}
-                >
-                  {data.to}
-                </Link>
-              ))}
-            </div>
-          )}
+    <Suspense>
+      <div className="w-full  min-h-[100vh]  p-5 bg-navy  main justify-center   flex ">
+        <div className="w-[1100px]  flex  gap-8  divide-y divide-grey bg-navy  items-start  max-2xl:flex-col ">
+          <div className="flex flex-col w-full  min-h-screeen">
+            {query !== "invite" && (
+              <div className="flex  items-center gap-6">
+                {navigation.map((data, index) => (
+                  <Link
+                    key={index}
+                    href={`/dashboard/teams/${team_id}?query=${data.query}`}
+                    className={`h-[40px]  px-3 text-silver-blue hover:underline text-sm flex items-center justify-center  rounded-full ${
+                      query === data.query && "bg-grey"
+                    }`}
+                  >
+                    {data.to}
+                  </Link>
+                ))}
+              </div>
+            )}
 
-          {children}
+            {children}
+          </div>
+          <TeamMenu />
         </div>
-        <TeamMenu />
       </div>
-    </div>
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useAuthContext } from "~/app/context/auth-context";
@@ -71,47 +71,49 @@ const Invite = () => {
     dep: user,
   });
   return (
-    <div className="flex flex-col py-5">
-      {hasError ? (
-        <div className="flex h-[200px] items-center justify-center ">
-          <div className="flex flex-col gap-1">
-            <p className=" text-xl text-white      spaced leading-none ">
-              Oops! We ran into a server error.
-            </p>
-            <p className="text-sm  normal-case  tracking-normal text-silver-blue line-clamp-3">
-              {error}
-            </p>
+    <Suspense>
+      <div className="flex flex-col py-5">
+        {hasError ? (
+          <div className="flex h-[200px] items-center justify-center ">
+            <div className="flex flex-col gap-1">
+              <p className=" text-xl text-white      spaced leading-none ">
+                Oops! We ran into a server error.
+              </p>
+              <p className="text-sm  normal-case  tracking-normal text-silver-blue line-clamp-3">
+                {error}
+              </p>
+            </div>
           </div>
-        </div>
-      ) : isFetching ? (
-        <div className="w-full h-32 items-center justify-center flex ">
-          <Image className="w-6" src={loadingGif} alt="loading" />
-        </div>
-      ) : (
-        <div className="flex flex-col w-[350px]  bg-fade-grey p-4 rounded-2xl gap-3">
-          <h1 className="text-2xl  sf-thin uppercase ">Welcome!</h1>
-          <p className="text-sm text-silver-blue ">
-            You’ve been invited to join the team! Join below to accept your
-            invitation and start collaborating.
-            <br />-{team?.name}
-          </p>
+        ) : isFetching ? (
+          <div className="w-full h-32 items-center justify-center flex ">
+            <Image className="w-6" src={loadingGif} alt="loading" />
+          </div>
+        ) : (
+          <div className="flex flex-col w-[350px]  bg-fade-grey p-4 rounded-2xl gap-3">
+            <h1 className="text-2xl  sf-thin uppercase ">Welcome!</h1>
+            <p className="text-sm text-silver-blue ">
+              You’ve been invited to join the team! Join below to accept your
+              invitation and start collaborating.
+              <br />-{team?.name}
+            </p>
 
-          {joinError && (
-            <h1 className="text-[11px] neue-light text-red text-center">
-              {joinError}
-            </h1>
-          )}
-          <AsyncButton
-            classname_overide="bg-powder-blue !text-sm p-2 rounded-sm !h-[40px]"
-            action="Join"
-            disabled={joining || loading}
-            loading={joining}
-            success={successful}
-            onClick={joinTeam}
-          />
-        </div>
-      )}
-    </div>
+            {joinError && (
+              <h1 className="text-[11px] neue-light text-red text-center">
+                {joinError}
+              </h1>
+            )}
+            <AsyncButton
+              classname_overide="bg-powder-blue !text-sm p-2 rounded-sm !h-[40px]"
+              action="Join"
+              disabled={joining || loading}
+              loading={joining}
+              success={successful}
+              onClick={joinTeam}
+            />
+          </div>
+        )}
+      </div>
+    </Suspense>
   );
 };
 
