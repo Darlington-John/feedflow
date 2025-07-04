@@ -70,7 +70,7 @@ export async function POST(
       process.env.JWT_SECRET!,
       { expiresIn: "1d" }
     );
-    const inviteLink = `http://localhost:3000/dashboard/teams/${team_id}?query=invite&token=${inviteToken}`;
+    const inviteLink = `https://feedflow-gamma.vercel.app/dashboard/teams/${team_id}?query=invite&token=${inviteToken}`;
     await transporter.sendMail({
       ...mailOptions,
       to: memberEmail,
