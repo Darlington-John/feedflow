@@ -1,5 +1,6 @@
 import { FaPlus } from "react-icons/fa6";
 import NewFeedbackPopup from "../components/new-feedback-popup/feedback-popup";
+
 import { usePopup } from "~/lib/utils/toggle-popups";
 import { useParams } from "next/navigation";
 import logo from "~/public/images/logo.svg";
@@ -12,9 +13,14 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/redux/store";
 import { apiRequest } from "~/lib/utils/api-request";
-import { addMoreFeedbacks, setFeedbacks } from "~/lib/redux/slices/feedbacks";
+import {
+  addFeedback,
+  addMoreFeedbacks,
+  setFeedbacks,
+} from "~/lib/redux/slices/feedbacks";
 import { toast } from "react-toastify";
 import AsyncButton from "../../components/buttons/async-button";
+import { socket } from "~/lib/utils/socket";
 const Feedbacks = () => {
   const {
     isActive: feedbackPopup,
@@ -145,6 +151,16 @@ const Feedbacks = () => {
     return !(!isTagDefault || !isPriorityDefault! || !isRoleDefault);
   };
 
+  useEffect(() => {
+    socket.on("new-feedback", (feedback) => {
+      dispatch(addFeedback(feedback));
+      setFeedbacksCount((prev) => prev + 1);
+    });
+
+    return () => {
+      socket.off("new-feedback");
+    };
+  }, [dispatch]);
   return (
     <>
       <Loader
@@ -152,7 +168,7 @@ const Feedbacks = () => {
         errorFetching={fetchingError}
         error={fetchError}
       >
-        <div className="flex items-start  w-full flex-col gap-2">
+        <div className="flex items-start  w-full flex-col gap-2  relative  z-20">
           <div className="flex items-center justify-between w-full  py-2">
             {feedbacksCount > 0 && (
               <h1 className="text-xl sf-light text-silver-blue  max-sm:text-lg">
@@ -161,7 +177,7 @@ const Feedbacks = () => {
             )}
 
             <button
-              className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150 text-sm  max-sm:py-1 self-end"
+              className="flex items-center gap-1  bg-powder-blue  py-2 px-3 rounded-full  text-white hover:ring ring-white duration-150 text-sm  max-sm:py-1   self-end"
               onClick={() => {
                 toggleFeedbackPopup();
               }}
@@ -189,7 +205,11 @@ const Feedbacks = () => {
           {areAllFiltersDefault() ? (
             feedbacks && feedbacks?.length > 0 ? (
               feedbacks?.map((feed) => (
-                <FeedbackCard feed={feed} key={feed._id} />
+                <FeedbackCard
+                  feed={feed}
+                  key={feed._id}
+                  setFeedbackCount={setFeedbacksCount}
+                />
               ))
             ) : (
               <div className="min-h-[50vh]  flex  items-center justify-center flex-col gap-2  mx-auto">
@@ -205,7 +225,11 @@ const Feedbacks = () => {
             )
           ) : filteredFeedbacks && filteredFeedbacks?.length > 0 ? (
             filteredFeedbacks?.map((feed) => (
-              <FeedbackCard feed={feed} key={feed._id} />
+              <FeedbackCard
+                feed={feed}
+                key={feed._id}
+                setFeedbackCount={setFeedbacksCount}
+              />
             ))
           ) : (
             <div className="min-h-[50vh]  flex  items-center justify-center flex-col gap-2 mx-auto">
@@ -220,7 +244,7 @@ const Feedbacks = () => {
           )}
           {showMore && areAllFiltersDefault() && (
             <AsyncButton
-              action="+View  more posts"
+              action="+View  more feedbacks"
               loading={moreFeedbacksLoading}
               success={moreFeedbacksSuccess}
               classname_overide="max-w-34 !h-[30px] text-xs "

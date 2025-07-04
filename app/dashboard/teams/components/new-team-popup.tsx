@@ -9,6 +9,9 @@ import { useAuthContext } from "~/app/context/auth-context";
 import { useUtilsContext } from "~/app/context/utils-context";
 import { apiRequest } from "~/lib/utils/api-request";
 import { FaCheck } from "react-icons/fa";
+import { AppDispatch } from "~/lib/redux/store";
+import { useDispatch } from "react-redux";
+import { addTeam } from "~/lib/redux/slices/teams";
 
 interface props {
   newTeamPopup: boolean;
@@ -25,13 +28,14 @@ const NewTeamPopup = ({
   disableNewTeamPopup,
 }: props) => {
   const { user } = useAuthContext();
-  const { toggleAuthPopup } = useUtilsContext();
+  const { toggleAuthPopup, setRerenderKey } = useUtilsContext();
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState("");
   const [sucessful, setSucessful] = useState(false);
   const [teamName, setTeamName] = useState("");
   const [teamDesc, setTeamDesc] = useState("");
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const createTeam = async () => {
     if (!user) {
       toggleAuthPopup();
@@ -65,8 +69,10 @@ const NewTeamPopup = ({
           setTeamName("");
           setTeamDesc("");
           setSucessful(false);
-          router.push(`/dashboard/teams/${res.teamId}`);
-          toast.info("Redirecting");
+          dispatch(addTeam(res.newTeam));
+          setTimeout(() => setRerenderKey((prev) => prev + 1), 1000);
+          router.push(`/dashboard/teams/${res.teamId}?query=feedbacks`);
+          toast.success("Redirecting");
         }, 1500);
       },
       onError: (error) => {

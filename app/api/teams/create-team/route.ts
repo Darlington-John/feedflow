@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
       {
         message: "Team created successfully",
         teamId: newTeam._id,
+        newTeam,
       },
 
       { status: 200 }

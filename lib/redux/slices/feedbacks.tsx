@@ -27,6 +27,30 @@ const feedbacksSlice = createSlice({
         return feedback._id !== feedbackId;
       });
     },
+    markFeedback: (
+      state,
+      action: PayloadAction<{
+        feedbackId: string;
+        status: string;
+        user: {
+          _id: string;
+          username: string;
+          profile: string;
+        };
+      }>
+    ) => {
+      const { feedbackId, status, user } = action.payload;
+
+      const feedback = state.feedbacks.find((f) => f._id === feedbackId);
+
+      if (feedback) {
+        feedback.status = {
+          type: status,
+          marked_by: user,
+          marked_at: new Date().toISOString(),
+        };
+      }
+    },
 
     addMoreFeedbacks: (state, action: PayloadAction<feedback_type[]>) => {
       state.feedbacks.push(...action.payload);
@@ -34,7 +58,12 @@ const feedbacksSlice = createSlice({
   },
 });
 
-export const { setFeedbacks, addMoreFeedbacks, deleteFeedback, addFeedback } =
-  feedbacksSlice.actions;
+export const {
+  setFeedbacks,
+  addMoreFeedbacks,
+  deleteFeedback,
+  addFeedback,
+  markFeedback,
+} = feedbacksSlice.actions;
 
 export default feedbacksSlice.reducer;

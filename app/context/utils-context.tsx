@@ -15,6 +15,8 @@ interface UtilsContextType {
   createTeamPopupRef: React.RefObject<HTMLDivElement | null>;
   setDisableTeamPopup: React.Dispatch<React.SetStateAction<boolean>>;
   toggleCreateTeamPopup: () => void;
+  rerenderKey: number;
+  setRerenderKey: React.Dispatch<React.SetStateAction<number>>;
 }
 export const UtilsContext = createContext<UtilsContextType | null>(null);
 
@@ -29,6 +31,7 @@ export const UtilsProvider: React.FC<{ children: React.ReactNode }> = ({
     setDisableToggle: setDisableToggle,
   } = usePopup();
   const [overlayOpen, setOverlayOpen] = useState(false);
+  const [rerenderKey, setRerenderKey] = useState(0);
   const {
     isActive: createTeamPopup,
     isVisible: createTeamPopupVisible,
@@ -51,6 +54,8 @@ export const UtilsProvider: React.FC<{ children: React.ReactNode }> = ({
       setDisableTeamPopup,
       overlayOpen,
       setOverlayOpen,
+      setRerenderKey,
+      rerenderKey,
     }),
     [
       authPopup,
@@ -65,6 +70,8 @@ export const UtilsProvider: React.FC<{ children: React.ReactNode }> = ({
       setDisableTeamPopup,
       overlayOpen,
       setOverlayOpen,
+      setRerenderKey,
+      rerenderKey,
     ]
   );
 

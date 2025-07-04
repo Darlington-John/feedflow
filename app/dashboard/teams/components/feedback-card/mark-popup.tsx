@@ -4,10 +4,14 @@ import { FaCheck, FaChevronDown, FaCircleUser } from "react-icons/fa6";
 import { GoGear } from "react-icons/go";
 import { IoMdClose } from "react-icons/io";
 import { IoSearch } from "react-icons/io5";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useAuthContext } from "~/app/context/auth-context";
 import { useUtilsContext } from "~/app/context/utils-context";
 import AsyncButton from "~/app/dashboard/components/buttons/async-button";
+import { markFeedback } from "~/lib/redux/slices/feedbacks";
+import { markUserFeedback } from "~/lib/redux/slices/user-feedbacks";
+import { AppDispatch } from "~/lib/redux/store";
 import { feedback_type } from "~/lib/types/feedback";
 import { apiRequest } from "~/lib/utils/api-request";
 import { formatRelativeTime } from "~/lib/utils/relative-time";
@@ -20,6 +24,7 @@ interface Props {
   togglePopup: () => void;
   setDisable: React.Dispatch<React.SetStateAction<boolean>>;
   feed: feedback_type;
+  compact?: boolean;
 }
 const MarkFeedback = ({
   isActive,
@@ -28,6 +33,7 @@ const MarkFeedback = ({
   togglePopup,
   setDisable,
   feed,
+  compact = false,
 }: Props) => {
   const { user } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -35,6 +41,7 @@ const MarkFeedback = ({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [successful, setSuccessful] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const mark = async () => {
     if (!user) {
       toggleAuthPopup();
@@ -52,7 +59,9 @@ const MarkFeedback = ({
     setDisable(true);
 
     await apiRequest({
-      url: `/api/teams/${team_id}/mark-feedback`,
+      url: compact
+        ? `/api/teams/${feed?.team?._id}/mark-feedback`
+        : `/api/teams/${team_id}/mark-feedback`,
       method: "PATCH",
       body: { userId: user._id, feedId: feed._id, status },
       onSuccess: (response) => {
@@ -64,7 +73,28 @@ const MarkFeedback = ({
         setTimeout(() => {
           togglePopup();
           setSuccessful(false);
-          window.dispatchEvent(new CustomEvent("refreshFeedbacks"));
+          dispatch(
+            markFeedback({
+              feedbackId: feed._id,
+              status: status,
+              user: {
+                _id: user?._id,
+                username: user?.username,
+                profile: user?.profile,
+              },
+            })
+          );
+          dispatch(
+            markUserFeedback({
+              feedbackId: feed._id,
+              status: status,
+              user: {
+                _id: user?._id,
+                username: user?.username,
+                profile: user?.profile,
+              },
+            })
+          );
         }, 3000);
       },
       onError: (error) => {

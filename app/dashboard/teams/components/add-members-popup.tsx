@@ -91,9 +91,7 @@ const AddMembersPopup = ({
               Invite members
             </h1>
             <p className="text-grey-blue text-center text-sm ">
-              Enter the member&apos;s email here to either send an invite if
-              they&apos;re not on the app, or a notification if they already
-              have an account.
+              Enter the member&apos;s email here to either send an invite email
             </p>
           </div>
           <ClassicInput

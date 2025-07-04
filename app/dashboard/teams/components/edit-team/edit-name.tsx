@@ -6,6 +6,10 @@ import AsyncButton from "~/app/dashboard/components/buttons/async-button";
 import ClassicInput from "~/app/dashboard/components/inputs/classic-inputs";
 import { useAuthContext } from "~/app/context/auth-context";
 import { apiRequest } from "~/lib/utils/api-request";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/lib/redux/store";
+import { useUtilsContext } from "~/app/context/utils-context";
+import { editTeamName } from "~/lib/redux/slices/teams";
 
 interface PopupPrompt {
   isVisible: boolean;
@@ -23,11 +27,13 @@ const EditTeamName = ({
   setDisable,
 }: PopupPrompt) => {
   const { user } = useAuthContext();
+  const { setRerenderKey } = useUtilsContext();
   const { team_id } = useParams();
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [successful, setSuccessful] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const editName = async () => {
     if (!user) {
       return;
@@ -47,6 +53,8 @@ const EditTeamName = ({
       method: "PATCH",
       body: { userId: user._id, name },
       onSuccess: (response) => {
+        dispatch(editTeamName({ name: name, teamId: team_id as string }));
+        setTimeout(() => setRerenderKey((prev) => prev + 1), 1000);
         setSuccessful(true);
         setName("");
         toast.success(response.message, {

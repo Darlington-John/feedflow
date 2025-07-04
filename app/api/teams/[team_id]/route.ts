@@ -13,8 +13,6 @@ export async function GET(
   try {
     const { team_id } = await params;
     await connectMongo();
-
-    console.log("teamId", team_id);
     if (!team_id) {
       return NextResponse.json(
         { error: "Team Id not provided" },

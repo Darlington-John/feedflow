@@ -6,6 +6,10 @@ import AsyncButton from "~/app/dashboard/components/buttons/async-button";
 import { useAuthContext } from "~/app/context/auth-context";
 import { apiRequest } from "~/lib/utils/api-request";
 import { team_type } from "~/lib/types/team";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/lib/redux/store";
+import { deleteTeam } from "~/lib/redux/slices/teams";
+import { useUtilsContext } from "~/app/context/utils-context";
 
 interface PopupPrompt {
   isVisible: boolean;
@@ -26,10 +30,12 @@ const LeaveTeamPopup = ({
 }: PopupPrompt) => {
   const { user } = useAuthContext();
   const { team_id } = useParams();
+  const { setRerenderKey } = useUtilsContext();
   const [error, setError] = useState("");
   const [leaving, setLeaving] = useState(false);
   const [successful, setSuccessful] = useState(false);
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
   const leaveTeam = async () => {
     if (!user) {
       return;
@@ -50,11 +56,12 @@ const LeaveTeamPopup = ({
         toast.success(response.message, {
           icon: <FaCheck color="white" />,
         });
-
+        dispatch(deleteTeam({ teamId: team_id as string }));
         router.push("/dashboard");
         setTimeout(() => {
           togglePopup();
           setSuccessful(false);
+          setRerenderKey((prev) => prev + 1);
         }, 3000);
       },
       onError: (error) => {

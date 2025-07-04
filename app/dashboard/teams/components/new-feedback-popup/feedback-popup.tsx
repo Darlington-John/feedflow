@@ -14,9 +14,9 @@ import { usePopup } from "~/lib/utils/toggle-popups";
 import { TiStarburst } from "react-icons/ti";
 import PriorityRating from "./priority";
 import TextEditor from "~/app/dashboard/components/text-editor/text-editor";
-import { useDispatch } from "react-redux";
-import { addFeedback } from "~/lib/redux/slices/feedbacks";
+
 import { feedback_type } from "~/lib/types/feedback";
+import { socket } from "~/lib/utils/socket";
 
 interface props {
   newFeedbackPopup: boolean;
@@ -32,7 +32,6 @@ const NewFeedbackPopup = ({
   newFeedbackPopupRef,
   toggleNewFeedbackPopup,
   disableNewFeedbackPopup,
-  setFeedbacksCount,
 }: props) => {
   const { user } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -83,7 +82,6 @@ const NewFeedbackPopup = ({
       return false;
     });
   };
-  const dispatch = useDispatch();
   const createFeedback = async () => {
     if (!user) {
       toggleAuthPopup();
@@ -124,8 +122,8 @@ const NewFeedbackPopup = ({
             profile: user?.profile,
           },
         };
-        dispatch(addFeedback(newFeedback));
-        setFeedbacksCount((prev) => prev + 1);
+        socket.emit("new-feedback", newFeedback);
+
         toast.success(res.message, {
           icon: <FaCheck color="white" />,
         });

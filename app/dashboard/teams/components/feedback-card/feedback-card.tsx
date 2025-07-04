@@ -20,10 +20,12 @@ import { deleteFeedback } from "~/lib/redux/slices/feedbacks";
 
 interface props {
   feed: feedback_type;
+  setFeedbackCount: React.Dispatch<React.SetStateAction<number>>;
 }
-const FeedbackCard = ({ feed }: props) => {
+const FeedbackCard = ({ feed, setFeedbackCount }: props) => {
   const { user } = useAuthContext();
   const { team_id } = useParams();
+
   const types = [
     {
       type: "bug",
@@ -92,6 +94,7 @@ const FeedbackCard = ({ feed }: props) => {
           toggleDeleteOpen();
           setSucessful(false);
           dispatch(deleteFeedback({ feedbackId: feed._id }));
+          setFeedbackCount((prev) => prev - 1);
         }, 3000);
       },
       onError: (error) => {
@@ -106,7 +109,7 @@ const FeedbackCard = ({ feed }: props) => {
 
   return (
     <div
-      className="flex flex-col gap-2 w-full items-start bg-[#01081229]  p-4  rounded-xl  relative "
+      className="flex flex-col gap-2 w-full items-start bg-[#01081229]  p-4  rounded-xl  relative z-20 "
       key={feed._id}
     >
       <div className="w-full justify-between  flex gap-2 items-center">
@@ -120,7 +123,7 @@ const FeedbackCard = ({ feed }: props) => {
             />
           ) : (
             <div className="items-center justify-center  flex  rounded-full bg-grey w-10  h-10   ring ring-grey">
-              <FaCircleUser size={50} />
+              <FaCircleUser className="text-2xl" />
             </div>
           )}
           <div className="flex flex-col items-start  gap-1">
@@ -140,35 +143,34 @@ const FeedbackCard = ({ feed }: props) => {
             </span>
           </div>
         </div>
-        {!feed.superAdminIds?.includes(feed.by._id) &&
-          (feed.adminIds?.includes(user?._id as string) ||
-            feed.superAdminIds?.includes(user?._id as string) ||
-            feed.by._id === user?._id) && (
-            <div className="relative">
-              <button
-                className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
-                onClick={toggleDeleteOpen}
+        {(feed.adminIds?.includes(user?._id as string) ||
+          feed.superAdminIds?.includes(user?._id as string) ||
+          feed.by._id === user?._id) && (
+          <div className="relative">
+            <button
+              className="flex items-center justify-center  p-1 hover:bg-grey rounded-full duration-150"
+              onClick={toggleDeleteOpen}
+            >
+              <FaEllipsisH size={12} />
+            </button>
+            {deleteOpen && (
+              <div
+                className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
+                  deleteVisible ? "" : "mid-popup-hidden"
+                }`}
+                ref={deleteRef}
               >
-                <FaEllipsisH size={12} />
-              </button>
-              {deleteOpen && (
-                <div
-                  className={`w-[120px]     mid-popup   duration-150  flex flex-col rounded-lg bg-navy   items-center  rounded-full absolute  top-[100%]  right-0   shadow-xl z-10 border border-grey  ${
-                    deleteVisible ? "" : "mid-popup-hidden"
-                  }`}
-                  ref={deleteRef}
-                >
-                  <AsyncButton
-                    action="Delete feedback"
-                    classname_overide="!h-8 !rounded-sm !bg-grey"
-                    loading={deleting}
-                    success={sucessful}
-                    onClick={handleDeleteFeedback}
-                  />
-                </div>
-              )}
-            </div>
-          )}
+                <AsyncButton
+                  action="Delete feedback"
+                  classname_overide="!h-8 !rounded-sm !bg-grey"
+                  loading={deleting}
+                  success={sucessful}
+                  onClick={handleDeleteFeedback}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div
         className={`flex items-center   px-1   py-1 text-left  rounded-full   ${bgOnType}`}

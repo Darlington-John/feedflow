@@ -6,6 +6,10 @@ import AsyncButton from "~/app/dashboard/components/buttons/async-button";
 import { useAuthContext } from "~/app/context/auth-context";
 import { apiRequest } from "~/lib/utils/api-request";
 import { team_type } from "~/lib/types/team";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/lib/redux/store";
+import { deleteTeam } from "~/lib/redux/slices/teams";
+import { useUtilsContext } from "~/app/context/utils-context";
 
 interface PopupPrompt {
   isVisible: boolean;
@@ -24,12 +28,14 @@ const DeleteTeamPopup = ({
   setDisable,
 }: PopupPrompt) => {
   const { user } = useAuthContext();
+  const { setRerenderKey } = useUtilsContext();
   const { team_id } = useParams();
   const [error, setError] = useState("");
   const [leaving, setLeaving] = useState(false);
   const [successful, setSuccessful] = useState(false);
   const router = useRouter();
-  const deleteTeam = async () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const handleDeleteTeam = async () => {
     if (!user) {
       return;
     }
@@ -41,7 +47,7 @@ const DeleteTeamPopup = ({
     setError("");
     setDisable(true);
     await apiRequest({
-      url: `/api/teams/${team_id}/leave-team`,
+      url: `/api/teams/${team_id}/delete-team`,
       method: "DELETE",
       body: { userId: user._id },
       onSuccess: (response) => {
@@ -49,11 +55,12 @@ const DeleteTeamPopup = ({
         toast.success(response.message, {
           icon: <FaCheck color="white" />,
         });
-
+        dispatch(deleteTeam({ teamId: team_id as string }));
         router.push("/dashboard");
         setTimeout(() => {
           togglePopup();
           setSuccessful(false);
+          setRerenderKey((prev) => prev + 1);
         }, 3000);
       },
       onError: (error) => {
@@ -95,7 +102,7 @@ const DeleteTeamPopup = ({
               action="Delete"
               loading={leaving}
               success={successful}
-              onClick={deleteTeam}
+              onClick={handleDeleteTeam}
             />
             <button
               className="bg-grey text-center w-full  hover:outline outline-light-grey   !rounded-md text-sm"

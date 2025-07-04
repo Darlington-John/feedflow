@@ -15,6 +15,8 @@ interface AuthContextType {
   setUser: React.Dispatch<React.SetStateAction<user_type | null>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  hasError?: boolean;
+  error?: string;
 }
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -23,6 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<user_type | null>(null);
   const [loading, setLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+  const [error, setError] = useState("");
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -41,7 +45,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const dispatch = async () => {
         try {
-          const res = await fetch("/api/auth/user");
+          const res = await fetch("/api/user");
           if (!res.ok) {
             return;
           }
@@ -69,21 +73,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/auth/user", {
+        const res = await fetch("/api/user", {
           credentials: "include",
         });
+        const data = await res.json();
 
         if (!res.ok) {
           clearCookies().catch((error) => console.error("Error", error));
           setUser(null);
+          setError(data.error);
+          setHasError(true);
           return;
         }
 
-        const data = await res.json();
         setUser(data.user);
       } catch (err) {
         clearCookies().catch((error) => console.error(`Error  ${err}`, error));
         setUser(null);
+        setError(err as string);
+        setHasError(true);
       } finally {
         setLoading(false);
       }
@@ -107,9 +115,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       user,
       loading,
       setUser,
+      error,
       setLoading,
+      hasError,
     }),
-    [user, loading, setUser, setLoading]
+    [user, loading, setUser, setLoading, hasError, error]
   );
 
   return (

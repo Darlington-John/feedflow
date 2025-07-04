@@ -24,6 +24,7 @@ export async function PATCH(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }

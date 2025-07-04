@@ -15,7 +15,6 @@ export default function getCroppedImg({
     const image = new Image();
     image.crossOrigin = "anonymous";
     image.src = imageSrc;
-    console.log("pixel crop", pixelCrop);
     image.onload = () => {
       const canvas = document.createElement("canvas");
       canvas.width = pixelCrop.width;

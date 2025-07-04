@@ -172,7 +172,7 @@ const Members = () => {
           </div>
           {showMore && (
             <AsyncButton
-              action="+View  more posts"
+              action="+View  more feedbacks"
               loading={moreMembersLoading}
               success={moreMembersSuccess}
               classname_overide="max-w-34 !h-[30px] text-xs "

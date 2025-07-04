@@ -7,9 +7,14 @@ import { AuthProvider } from "./context/auth-context";
 import { Provider } from "react-redux";
 import AuthPrompt from "./auth/auth";
 import { ToastContainer } from "react-toastify";
-// import CreateCommunityPrompt from "./components/create-community-prompt/prompt";
+
+import NProgress from "nprogress";
 import { store } from "~/lib/redux/store";
 import { NextAuthProvider } from "./next-auth-provider";
+import Header from "./dashboard/components/header/header";
+import { usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { Router } from "next/router";
 
 const SFReg = localFont({
   src: "./fonts/SF-Pro-Display-Regular.otf",
@@ -36,6 +41,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    NProgress.start();
+    const timer = setTimeout(() => {
+      NProgress.done();
+    }, 500); // artificial delay (optional)
+
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
+  Router.events.on("routeChangeStart", () => NProgress.start());
+  Router.events.on("routeChangeComplete", () => NProgress.done());
+  Router.events.on("routeChangeError", () => NProgress.done());
   return (
     <html lang="en">
       <head>
@@ -52,7 +71,7 @@ export default function RootLayout({
               <UtilsProvider>
                 <ToastContainer position="bottom-right" closeButton={false} />
                 <AuthPrompt />
-                {/* <CreateCommunityPrompt /> */}
+                <Header />
 
                 {children}
               </UtilsProvider>

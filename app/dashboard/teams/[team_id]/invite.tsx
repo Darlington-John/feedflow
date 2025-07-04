@@ -29,7 +29,6 @@ const Invite = () => {
       return;
     }
     localStorage.setItem("invite-token", token);
-    console.log("token", token);
 
     if (!user) {
       toggleAuthPopup();

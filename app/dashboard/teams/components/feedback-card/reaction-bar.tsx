@@ -13,8 +13,9 @@ import { useParams } from "next/navigation";
 interface props {
   feed: feedback_type;
   toggleMarkOpen: () => void;
+  compact?: boolean;
 }
-const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
+const ReactionBar = ({ feed, toggleMarkOpen, compact = false }: props) => {
   const { user } = useAuthContext();
   const { team_id } = useParams();
   const { toggleAuthPopup } = useUtilsContext();
@@ -27,10 +28,14 @@ const ReactionBar = ({ feed, toggleMarkOpen }: props) => {
     }
 
     await apiRequest({
-      url:
-        action === "like"
-          ? ` /api/teams/${team_id}/like-feedback`
-          : `/api/teams/${team_id}/dislike-feedback`,
+      url: compact
+        ? action === "like"
+          ? ` /api/teams/${feed.team._id}/like-feedback`
+          : `/api/teams/${feed.team._id}/dislike-feedback`
+        : action === "like"
+        ? ` /api/teams/${team_id}/like-feedback`
+        : `/api/teams/${team_id}/dislike-feedback`,
+
       method: "PATCH",
       body: {
         feedId: feed._id,

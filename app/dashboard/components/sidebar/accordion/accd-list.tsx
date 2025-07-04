@@ -1,8 +1,8 @@
 "use client";
-
-import Image from "next/image";
+import { usePathname } from "next/navigation";
 import React, { useRef, useState, useEffect, ReactNode } from "react";
-import caretDown from "~/public/icons/caret-down.svg";
+import { FaAngleDown } from "react-icons/fa6";
+import { HiUserGroup } from "react-icons/hi2";
 interface AccordionItemProps {
   isOpen: boolean;
   onClick: () => void;
@@ -20,7 +20,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   ...props
 }) => {
   const contentRef = useRef<HTMLDivElement | null>(null);
-
+  const pathname = usePathname();
   const [height, setHeight] = useState("0px");
 
   useEffect(() => {
@@ -33,28 +33,37 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
   return (
     <div
-      className="overflow-hidden w-full flex flex-col   duration-100   py-3"
+      className="overflow-hidden w-full flex flex-col   duration-100 gap-1    "
       {...props}
     >
       <button
         onClick={onClick}
-        className="w-full h-[40px]  flex items-center justify-between border-none outline-none  rounded-lg hover:bg-fade-grey px-6"
+        className={`flex items-center justify-between  w-full   h-[45px] rounded px-6 duration-100   ${
+          pathname.startsWith("/dashboard/teams")
+            ? "bg-fade-grey"
+            : "hover:bg-fade-grey"
+        }  `}
       >
-        <p className="text-xs text-grey-blue  uppercase   tracking-wider ">
-          {header}
-        </p>
-        <Image
-          className={` duration-300  ${isOpen ? "rotate-180" : "rotate-0"}`}
-          alt=""
-          src={caretDown}
+        <div className="flex gap-2 items-center ">
+          <HiUserGroup className="text-silver-blue" size={24} />
+
+          <p className="text-xs text-grey-blue  uppercase   tracking-wider ">
+            {header}
+          </p>
+        </div>
+        <FaAngleDown
+          className={` duration-300 text-sm text-grey-blue   ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
         />
       </button>
+
       <div
         ref={contentRef}
         className="transition-all duration-300 ease-out overflow-hidden"
         style={{ height }}
       >
-        <div className="flex flex-col">{children}</div>
+        <div className="flex flex-col gap-1">{children}</div>
       </div>
     </div>
   );

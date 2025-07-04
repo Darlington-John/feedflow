@@ -5,11 +5,12 @@ import { useUtilsContext } from "~/app/context/utils-context";
 import { usePopup } from "~/lib/utils/toggle-popups";
 import ProfileMenu from "./profile-menu";
 import LogoutPrompt from "./logout-prompt";
-import { FaRegBell } from "react-icons/fa";
 import logo from "~/public/images/logo.svg";
 import { toggleOverlay } from "~/lib/utils/toggle-overlay";
 import { FaPlus } from "react-icons/fa6";
 import { IoMdClose, IoMdMenu } from "react-icons/io";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 const Header = () => {
   const { user, loading } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -34,14 +35,15 @@ const Header = () => {
     setOverlayOpen(!overlayOpen);
   };
   const { toggleCreateTeamPopup } = useUtilsContext();
+  const pathname = usePathname();
   return (
     <header className="flex items-center justify-between w-[calc(100vw-5px)]  px-4 py-2 bg-navy  border-b-grey border-b-2  fixed top-0   z-1000 max-sm:py-1  max-xs:px-2">
-      <div className="flex items-center  gap-1 ">
+      <Link href="/" className="flex items-center  gap-1 ">
         <Image src={logo} alt="drlix_logo" className="w-10 max-sm:w-7" />
         <h1 className="text-3xl  sf-bold  text-white max-sm:text-2xl">
           feedflow
         </h1>
-      </div>
+      </Link>
 
       <div className="flex items-center gap-0">
         {!loading &&
@@ -54,12 +56,13 @@ const Header = () => {
                 <FaPlus />
                 <span>New team</span>
               </button>
-              <button className="hover:bg-grey py-2 px-2 rounded-full ">
-                <FaRegBell className=" text-silver-blue text-xl max-sm:text-base" />
-              </button>
+
               <div className="relative">
                 <button
-                  className="hover:bg-grey py-1  px-1  rounded-full "
+                  className={`hover:bg-grey py-1  px-1  rounded-full ${
+                    pathname.startsWith("/dashboard/profile") &&
+                    "outline  outline-powder-blue"
+                  }`}
                   onClick={toggleProfileMenu}
                 >
                   {/* eslint-disable */}
@@ -95,17 +98,18 @@ const Header = () => {
               </button>
             </div>
           ))}
-
-        <button
-          className="bg-grey p-1  rounded-full  hidden max-md:flex"
-          onClick={handleToggleOverlay}
-        >
-          {overlayOpen ? (
-            <IoMdClose className="text-xl text-silver-blue " />
-          ) : (
-            <IoMdMenu className="text-xl text-silver-blue" />
-          )}
-        </button>
+        {user && (
+          <button
+            className="bg-grey p-1  rounded-full  hidden max-md:flex"
+            onClick={handleToggleOverlay}
+          >
+            {overlayOpen ? (
+              <IoMdClose className="text-xl text-silver-blue " />
+            ) : (
+              <IoMdMenu className="text-xl text-silver-blue" />
+            )}
+          </button>
+        )}
       </div>
     </header>
   );

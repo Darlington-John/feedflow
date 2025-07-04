@@ -29,7 +29,7 @@ const MemberMenu = ({
   const [deleting, setDeleting] = useState(false);
   const [sucessful, setSucessful] = useState(false);
   const [gradeSucessful, setgradeSucessful] = useState(false);
-  console.log("assss", member);
+
   const [grading, setgrading] = useState(false);
   const { user } = useAuthContext();
   const dispatch = useDispatch<AppDispatch>();

@@ -1,7 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
-const uri = "mongo uri here for testing only remove in production";
+const uri =
+  "mongodb+srv://darlingtonjohn914:On0UNijkSnOA0oVb@cluster0.pji2w.mongodb.net/feedflow?retryWrites=true&w=majority&appName=cluster0";
 
 const client = new MongoClient(uri, {
   serverApi: {

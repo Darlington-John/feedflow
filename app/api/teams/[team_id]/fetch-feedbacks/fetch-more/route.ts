@@ -14,7 +14,7 @@ export async function GET(
     const userId = searchParams.get("userId");
     const { team_id } = await params;
     const skip = parseInt(searchParams.get("skip") || "0", 10);
-    const limit = parseInt(searchParams.get("limit") || "1", 1);
+    const limit = parseInt(searchParams.get("limit") || "10", 10);
     if (!userId) {
       return NextResponse.json(
         { error: "UserId not provided" },
@@ -51,7 +51,8 @@ export async function GET(
       .populate({
         path: "status.marked_by",
         select: "username profile",
-      });
+      })
+      .populate({ path: "team", select: "super_admins  admins  icon  name" });
     const adminIds = team.admins.map((id) => id.toString());
     const superAdminIds = team.super_admins.map((id) => id.toString());
 

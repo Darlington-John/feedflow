@@ -22,7 +22,13 @@ export interface feedback_type {
   priority: number;
   likes: string[];
   dislikes: string[];
-  team: string;
+  team: {
+    super_admins: string[];
+    admins: string[];
+    icon: string;
+    name: string;
+    _id: string;
+  };
   createdAt: string;
   superAdminIds: string[];
   adminIds: string[];

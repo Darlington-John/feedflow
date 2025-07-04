@@ -1,6 +1,5 @@
 "use client";
 import { useUtilsContext } from "../context/utils-context";
-import Header from "./components/header/header";
 import Overlay from "./components/overlay";
 import Sidebar from "./components/sidebar/sidebar";
 import NewTeamPopup from "./teams/components/new-team-popup";
@@ -17,13 +16,19 @@ export default function RootLayout({
     toggleCreateTeamPopup,
     setDisableTeamPopup,
   } = useUtilsContext();
+
   return (
     <>
       <main className="flex ">
-        <Header />
         <Sidebar />
 
-        <div className=" max-h-screen overflow-auto w-full pt-[57px] text-white max-md:pt-[47px]">
+        <div className=" max-h-screen overflow-auto w-full pt-[57px] text-white max-md:pt-[47px] relative ">
+          <div
+            style={{
+              backgroundImage: `url(/images/doodle.svg)`,
+            }}
+            className="pointer-events-none   fixed  top-0 left-0 w-full min-h-screen   h-full object-cover opacity-20 z-1"
+          ></div>
           {children}
         </div>
       </main>

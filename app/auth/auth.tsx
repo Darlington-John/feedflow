@@ -13,6 +13,7 @@ import { signIn } from "next-auth/react";
 import { useCurrentUrl } from "~/lib/utils/get-current-url";
 import { BiArrowBack } from "react-icons/bi";
 import { FaXmark } from "react-icons/fa6";
+import { usePathname, useRouter } from "next/navigation";
 const AuthPrompt = () => {
   const {
     authPopup,
@@ -38,6 +39,8 @@ const AuthPrompt = () => {
     "forgot-password-verify-email": "forgot-password",
     "forgot-password-reset": "forgot-password-verify-email",
   };
+  const router = useRouter();
+  const pathname = usePathname();
   const handleSubmit = async (action: string) => {
     const loginFieldsFilled = email && password;
     const signupFieldsFilled = loginFieldsFilled && username;
@@ -109,8 +112,12 @@ const AuthPrompt = () => {
             const { token } = data;
             document.cookie = `token=${token}; Path=/; Secure;`; // ✅ not HttpOnly
             window.dispatchEvent(new CustomEvent("userUpdated"));
+            if (pathname === "/") {
+              router.push("/dashboard");
+            }
             setTimeout(() => {
               toggleAuthPopup();
+
               setSuccessful(false);
               setVerificationCode(Array(4).fill(""));
               setCurrentAction("log-in");
@@ -119,8 +126,12 @@ const AuthPrompt = () => {
 
           case "log-in":
             window.dispatchEvent(new CustomEvent("userUpdated"));
+            if (pathname === "/") {
+              router.push("/dashboard");
+            }
             setTimeout(() => {
               toggleAuthPopup();
+
               setSuccessful(false);
             }, 1500);
             break;
@@ -139,6 +150,9 @@ const AuthPrompt = () => {
             break;
           case "forgot-password-reset":
             window.dispatchEvent(new CustomEvent("userUpdated"));
+            if (pathname === "/") {
+              router.push("/dashboard");
+            }
             setTimeout(() => {
               setSuccessful(false);
               toggleAuthPopup();

@@ -28,7 +28,7 @@ const ProfileMenu = ({
       >
         <div className="flex flex-col w-full ">
           <Link
-            href={`/users/${user._id}?query=posts`}
+            href={`/dashboard/profile?query=feedbacks`}
             className="flex  items-center gap-3 py-2 hover:bg-grey px-2 rounded-sm"
           >
             {/* eslint-disable-next-line */}
