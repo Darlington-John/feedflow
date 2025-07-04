@@ -83,7 +83,7 @@ export async function POST(
       { status: 200 }
     );
   } catch (error) {
-    console.error("Add member error:", error);
+    console.log("Add member error:", error);
     return NextResponse.json(
       { error: "A server error occurred" },
       { status: 500 }
