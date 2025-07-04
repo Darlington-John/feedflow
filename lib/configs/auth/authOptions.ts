@@ -8,7 +8,7 @@ import connectMongo from "~/lib/mongodb";
 import { slugify } from "~/lib/utils/sluggify";
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -61,3 +61,5 @@ export const authOptions: NextAuthOptions = {
     strategy: "jwt",
   },
 };
+
+export default authOptions;
