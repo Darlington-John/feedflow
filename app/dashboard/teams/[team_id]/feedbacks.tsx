@@ -13,14 +13,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "~/lib/redux/store";
 import { apiRequest } from "~/lib/utils/api-request";
-import {
-  addFeedback,
-  addMoreFeedbacks,
-  setFeedbacks,
-} from "~/lib/redux/slices/feedbacks";
+import { addMoreFeedbacks, setFeedbacks } from "~/lib/redux/slices/feedbacks";
 import { toast } from "react-toastify";
 import AsyncButton from "../../components/buttons/async-button";
-import { socket } from "~/lib/utils/socket";
+
 const Feedbacks = () => {
   const {
     isActive: feedbackPopup,
@@ -151,16 +147,6 @@ const Feedbacks = () => {
     return !(!isTagDefault || !isPriorityDefault! || !isRoleDefault);
   };
 
-  useEffect(() => {
-    socket.on("new-feedback", (feedback) => {
-      dispatch(addFeedback(feedback));
-      setFeedbacksCount((prev) => prev + 1);
-    });
-
-    return () => {
-      socket.off("new-feedback");
-    };
-  }, [dispatch]);
   return (
     <>
       <Loader

@@ -49,13 +49,15 @@ const Header = () => {
         {!loading &&
           (user ? (
             <>
-              <button
-                className="flex items-center gap-1  hover:bg-grey h-[35px] rounded-full px-2 text-sm  text-silver-blue  hover:text-white  duration-150 max-xs:hidden"
-                onClick={toggleCreateTeamPopup}
-              >
-                <FaPlus />
-                <span>New team</span>
-              </button>
+              {pathname !== "/" && (
+                <button
+                  className="flex items-center gap-1  hover:bg-grey h-[35px] rounded-full px-2 text-sm  text-silver-blue  hover:text-white  duration-150 max-xs:hidden"
+                  onClick={toggleCreateTeamPopup}
+                >
+                  <FaPlus />
+                  <span>New team</span>
+                </button>
+              )}
 
               <div className="relative">
                 <button

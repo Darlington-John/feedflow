@@ -7,7 +7,7 @@ import { apiRequest } from "~/lib/utils/api-request";
 import Loader from "./components/loader";
 import { feedback_type } from "~/lib/types/feedback";
 import WeeklyFeedbackChart from "./components/graph/graph";
-import RecentFeedbacks from "./components/recent-feedbacks";
+import Feedbacks from "./profile/user-feedbacks";
 export default function Home() {
   const { user, loading } = useAuthContext();
   const [totalFeedbacks, setTotalFeedbacks] = useState(0);
@@ -103,7 +103,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <RecentFeedbacks />
+          <Feedbacks />
         </div>
       </Loader>
     </div>

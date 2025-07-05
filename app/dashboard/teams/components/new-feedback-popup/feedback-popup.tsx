@@ -1,6 +1,6 @@
 "use client";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import type { JSONContent } from "@tiptap/react";
 import AsyncButton from "~/app/dashboard/components/buttons/async-button";
@@ -17,6 +17,9 @@ import TextEditor from "~/app/dashboard/components/text-editor/text-editor";
 
 import { feedback_type } from "~/lib/types/feedback";
 import { socket } from "~/lib/utils/socket";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "~/lib/redux/store";
+import { addFeedback } from "~/lib/redux/slices/feedbacks";
 
 interface props {
   newFeedbackPopup: boolean;
@@ -32,6 +35,7 @@ const NewFeedbackPopup = ({
   newFeedbackPopupRef,
   toggleNewFeedbackPopup,
   disableNewFeedbackPopup,
+  setFeedbacksCount,
 }: props) => {
   const { user } = useAuthContext();
   const { toggleAuthPopup } = useUtilsContext();
@@ -69,7 +73,7 @@ const NewFeedbackPopup = ({
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState<JSONContent | null>(null);
   const [priority, setPriority] = useState(1);
-
+  const dispatch = useDispatch<AppDispatch>();
   const hasValidContent = (nodes: JSONContent[]): boolean => {
     return nodes?.some((node) => {
       if (node.type === "image") return true;
@@ -82,25 +86,56 @@ const NewFeedbackPopup = ({
       return false;
     });
   };
+  useEffect(() => {
+    socket.on("new-feedback", (feedback) => {
+      dispatch(addFeedback(feedback));
+      setFeedbacksCount((prev) => prev + 1);
+    });
+
+    return () => {
+      socket.off("new-feedback");
+    };
+  }, [dispatch, setFeedbacksCount]);
+
+  const checkIfServerIsSleeping = async (): Promise<boolean> => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+
+      const res = await fetch("https://feedflow-server-2.onrender.com/ping", {
+        method: "GET",
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeout);
+      return !res.ok;
+    } catch (err) {
+      console.log(err);
+      return true;
+    }
+  };
+
   const createFeedback = async () => {
     if (!user) {
       toggleAuthPopup();
       return;
     }
-    if (creating) {
-      return;
-    }
+    if (creating) return;
+
     if (title.trim() === "") {
       setError("A short title is required");
       return;
     }
+
     if (!hasValidContent(details?.content || [])) {
       setError("Details must contain text or an image");
       return;
     }
+
     setCreating(true);
     setError("");
     disableNewFeedbackPopup(true);
+
     await apiRequest({
       url: `/api/teams/${team_id}/create-feedback`,
       method: "POST",
@@ -111,8 +146,9 @@ const NewFeedbackPopup = ({
         details,
         priority,
       },
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         setSucessful(true);
+
         const newFeedback: feedback_type = {
           ...res.feedback,
           by: {
@@ -122,11 +158,20 @@ const NewFeedbackPopup = ({
             profile: user?.profile,
           },
         };
-        socket.emit("new-feedback", newFeedback);
+
+        const isSleeping = await checkIfServerIsSleeping();
+
+        if (isSleeping) {
+          dispatch(addFeedback(newFeedback));
+          setFeedbacksCount((prev) => prev + 1);
+        } else {
+          socket.emit("new-feedback", newFeedback);
+        }
 
         toast.success(res.message, {
           icon: <FaCheck color="white" />,
         });
+
         setTimeout(() => {
           toggleNewFeedbackPopup();
           setTitle("");
