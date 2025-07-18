@@ -9,9 +9,42 @@ import { useAuthContext } from "~/app/context/auth-context";
 import EditName from "./edit-profile/edit-name-popup";
 import EditIcon from "./edit-profile/edit-icon-popup";
 import DeleteAccountPopup from "./delete-account-popup";
+import { useEffect, useState } from "react";
+import { apiRequest } from "~/lib/utils/api-request";
+import { user_type } from "~/lib/types/user";
 
 const ProfileMenu = () => {
-  const { user, hasError, error, loading } = useAuthContext();
+  const { loading: fetchingUser } = useAuthContext();
+  const [user, setUser] = useState<user_type>();
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState("");
+  const [fetchingError, setFetchingError] = useState(false);
+
+  useEffect(() => {
+    if (fetchingUser) {
+      return;
+    }
+    const fetchFeedbacks = async () => {
+      setLoading(true);
+      await apiRequest({
+        method: "GET",
+        url: `/api/user`,
+        onSuccess: (res) => {
+          setFetchingError(false);
+          setUser(res.user);
+        },
+        onError: (error) => {
+          setFetchError(error);
+          setFetchingError(true);
+        },
+        onFinally: () => {
+          setLoading(false);
+        },
+      });
+    };
+
+    fetchFeedbacks();
+  }, [fetchingUser]);
 
   const {
     isVisible: nameVisible,
@@ -40,14 +73,14 @@ const ProfileMenu = () => {
       <div
         className={`shrink-0  p-5 bg-dark-navy top-0 sticky w-[310px]  rounded-xl flex flex-col  gap-4   max-2xl:order-first max-2xl:w-full max-2xl:flex-row max-2xl:items-start  max-2xl:static  max-sm:flex-col overflow-hidden  `}
       >
-        {hasError ? (
+        {fetchingError ? (
           <div className="flex h-[200px] items-center justify-center ">
             <div className="flex flex-col gap-1">
               <p className=" text-xl text-white      spaced leading-none ">
                 Oops! We ran into a server error.
               </p>
               <p className="text-sm  normal-case  tracking-normal text-silver-blue line-clamp-3">
-                {error}
+                {fetchError}
               </p>
             </div>
           </div>
