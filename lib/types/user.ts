@@ -6,7 +6,6 @@ export interface user_type {
   profile: string;
   verificationHash?: string;
   oauthProvider: string;
-  user_slug: string;
   recent_teams: string[];
   recent_feedbacks: string[];
   bio: string;

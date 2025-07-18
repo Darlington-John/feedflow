@@ -69,17 +69,12 @@ export default function Home() {
           </div>
           <h3 className="text-xl font-bold text-white mb-2">Admin Controls</h3>
           <p className="text-silver-blue text-center">
-            Mark feedback as &apos; under review, &apos; &apos; in progress,
-            &apos; , &apos; completed &apos; , &apos; declined &apos; and keep
-            users in the loop.
+            Mark feedback as &apos;under review&apos;, &apos;in progress&apos;,
+            &apos; completed&apos;, &apos; declined &apos; and keep users in the
+            loop.
           </p>
         </div>
       </section>
-
-      {/* Footer / Final CTA */}
-      <footer className="w-full text-center py-6 text-silver-blue text-sm">
-        &copy; {new Date().getFullYear()} Feedflow &mdash; Inspired by Canny.io
-      </footer>
     </div>
   );
 }

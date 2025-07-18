@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import connectMongo from "~/lib/mongodb";
 import User from "~/lib/models/users";
-import { slugify } from "~/lib/utils/sluggify";
 import verification from "~/lib/models/verifications";
 import { avatars } from "~/lib/data/avatars";
 
@@ -43,7 +42,6 @@ export async function POST(req: NextRequest) {
       oauthProvider: "local",
       verifiedAt: new Date(),
       profile: randomAvatar,
-      user_slug: slugify(verificationRecord.username),
     });
 
     await verification.deleteOne({ email });

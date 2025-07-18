@@ -5,7 +5,6 @@ import { avatars } from "~/lib/data/avatars";
 import User from "~/lib/models/users";
 
 import connectMongo from "~/lib/mongodb";
-import { slugify } from "~/lib/utils/sluggify";
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 const authOptions: NextAuthOptions = {
@@ -30,8 +29,6 @@ const authOptions: NextAuthOptions = {
             oauthProvider: "google",
             isAdmin: false,
             username: user.name,
-            // @ts-expect-error: just ignore
-            user_slug: slugify(user?.name),
           });
         }
 
